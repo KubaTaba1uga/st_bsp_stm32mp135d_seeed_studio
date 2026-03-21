@@ -9,6 +9,7 @@ DOCS_PATH = os.path.join(ROOT_PATH, "docs")
 os.chdir(ROOT_PATH)
 os.environ["PATH"] = f"{os.path.join(ROOT_PATH, '.venv', 'bin')}:{os.environ['PATH']}"
 
+
 @task
 def install(c):
     _pr_info(f"Installing dependencies...")
@@ -32,6 +33,7 @@ def install(c):
         raise
 
     _pr_info(f"Installing dependencies completed")
+
 
 @task
 def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
@@ -74,14 +76,30 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
                 with c.cd(repo):
                     c.run(f"git checkout {rdata['tag']}")
 
-    # if config:
-    #     configure(c, config)
+    if config:
+        configure(c, config)
 
-    # with c.cd("build/buildroot"):
-    #     c.run("make BR2_DL_DIR=../../build/third_party")
+    with c.cd("build/buildroot"):
+        c.run("make BR2_DL_DIR=../build/third_party")
 
     _pr_info(f"Building BSP completed")
-    
+
+
+@task
+def configure(c, config):
+    _pr_info(f"Configuring buildroot...")
+
+    with c.cd("third_party/buildroot"):
+        flags = [
+            "O=../../build/buildroot",
+            "BR2_EXTERNAL=../../.",
+            config,
+        ]
+
+        c.run(f"make " + " ".join(flags))
+
+    _pr_info(f"Configuring buildroot completed")
+
 
 @task
 def docs_build(c):
@@ -119,6 +137,7 @@ def docs_serve(c, port=8000):
     )
 
     _pr_info("Serving docs completed")
+
 
 ###############################################
 #                Private API                  #
