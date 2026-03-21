@@ -299,5 +299,8 @@
 };
 
 /* USER CODE BEGIN addons */
+&cpu0 { // Enable CPU power
+	cpu-supply = <&vddcpu>;
+};
 /* USER CODE END addons */
 

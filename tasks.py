@@ -86,7 +86,7 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
 
 
 @task
-def configure(c, config):
+def configure(c, config="stm32mp135d_odyssey_dev_defconfig"):
     _pr_info(f"Configuring buildroot...")
 
     with c.cd("third_party/buildroot"):
