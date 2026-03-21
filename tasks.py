@@ -1,5 +1,4 @@
 import os
-import glob
 
 from invoke import task
 
@@ -34,6 +33,52 @@ def install(c):
 
     _pr_info(f"Installing dependencies completed")
 
+@task
+def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
+    """
+    @todo change config="ebook_reader_dev_defconfig" to config="ebook_reader_defconfig"
+          dev build should not be default.
+    """
+    repos = {
+        "buildroot": {
+            "tag": "st/2024.02.9",
+            "url": "https://github.com/bootlin/buildroot.git",
+        },
+        "linux": {
+            "tag": "v6.6-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/linux.git",
+        },
+        "u-boot": {
+            "tag": "v2023.10-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/u-boot.git",
+        },
+        "optee-os": {
+            "tag": "4.0.0-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/optee_os.git",
+        },
+        "tf-a": {
+            "tag": "v2.10-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/arm-trusted-firmware.git",
+        },
+    }
+    _pr_info(f"Building BSP...")
+
+    if "dev" in config:
+        c.run("mkdir -p third_party")
+        with c.cd("third_party"):
+            for repo, rdata in repos.items():
+                c.run(f"git clone {rdata['url']} {repo} || true")
+                with c.cd(repo):
+                    c.run(f"git checkout {rdata['tag']}")
+
+    # if config:
+    #     configure(c, config)
+
+    # with c.cd("build/buildroot"):
+    #     c.run("make BR2_DL_DIR=../../build/third_party")
+
+    _pr_info(f"Building BSP completed")
+    
 
 @task
 def docs_build(c):
@@ -89,4 +134,3 @@ def _pr_debug(message: str):
 
 def _pr_error(message: str):
     print(f"\033[91m[ERROR] {message}\033[0m")
-    
