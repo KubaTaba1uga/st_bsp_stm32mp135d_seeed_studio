@@ -38,6 +38,9 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
     """
     @todo change config="ebook_reader_dev_defconfig" to config="ebook_reader_defconfig"
           dev build should not be default.
+
+    @todo download repos only if dev config
+    @todo get urls and versions from config file
     """
     repos = {
         "buildroot": {
