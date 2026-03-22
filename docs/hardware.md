@@ -86,14 +86,14 @@ Micro SD card
 
 SD Card slot has 9 wires VDD (power), VSS (ground), CLK (clock), CMD (command), DAT0 (data), DAT1, DAT2, DAT3 and CD (card detection).
 
-According to SD spec SD card itself has embedded microcontroller, so purpose of the slot is only to provide physical wiring so the MCU
+According to SD specification SD card itself has embedded microcontroller, so purpose of the slot is only to provide physical wiring so the MCU
 inside an SD card can talk to SDMMC chip inside the CPU. SD card slot model is ST-TF-003A which datasheet is available [here](path:./assets/ST-TF-003A.pdf).
 
 Power pin is connected to one of PMIC outputs. The SD card slot support 4 bit SD bus mode, so we have 4 data wires between the slot and CPU.
 
 The SD card slot is missing from the picture because it is on the other side of the board.
 
-```{csv-table} USB C pinnout
+```{csv-table} Micro SD Card pinnout
 :header: >
 :    "Func", "Ball", "Chip Pin", "Description"
 :widths: 20, 10, 20, 30
@@ -103,6 +103,7 @@ The SD card slot is missing from the picture because it is on the other side of 
 "SDMMC1_DAT2", "A18", "GPIOC pin 10", "Data 2"
 "SDMMC1_DAT3", "B18", "GPIOC pin 11", "Data 3"
 "SDMMC1_CLK", "A19", "GPIOC pin 12", "Clock"
+"SDMMC1_CMD", "C19", "GPIOD pin 2", "Command or Response"
 "SDMMC1_CD", "E14", "GPIOH pin 10", "Card detection"
 ```
 
@@ -114,3 +115,4 @@ The SD card slot is missing from the picture because it is on the other side of 
 
 ![Circuit diagram for Micro SD card](assets/sd_card_schematics_3.png)
 
+![Circuit diagram for Micro SD card](assets/sd_card_schematics_4.png)
