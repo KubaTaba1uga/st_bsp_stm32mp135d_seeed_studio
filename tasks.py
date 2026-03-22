@@ -139,6 +139,30 @@ def docs_serve(c, port=8000):
     _pr_info("Serving docs completed")
 
 
+@task
+def deploy_sdcard(c, dev="sda"):
+    _pr_info(f"Deploying to sdcard...")
+
+    if not os.path.exists("/dev/disk/by-partlabel/fsbl1"):
+        raise ValueError("No /dev/disk/by-partlabel/fsbl1")
+    if not os.path.exists("/dev/disk/by-partlabel/fsbl2"):
+        raise ValueError("No /dev/disk/by-partlabel/fsbl2")
+    if not os.path.exists("/dev/disk/by-partlabel/fip"):
+        raise ValueError("No /dev/disk/by-partlabel/fip")
+
+    with c.cd("build/buildroot/images"):
+        c.run(
+            "sudo dd if=tf-a-stm32mp135d-odyssey_dev_minimal_dt-mx.stm32 of=/dev/disk/by-partlabel/fsbl1 bs=1K conv=fsync"
+        )
+        c.run(
+            "sudo dd if=tf-a-stm32mp135d-odyssey_dev_minimal_dt-mx.stm32 of=/dev/disk/by-partlabel/fsbl2 bs=1K conv=fsync"
+        )
+        c.run("sudo dd if=fip.bin of=/dev/disk/by-partlabel/fip bs=1K conv=fsync")
+
+    c.run("sudo sync")
+
+    _pr_info(f"Deploy to sdcard completed")
+
 ###############################################
 #                Private API                  #
 ###############################################
@@ -156,3 +180,4 @@ def _pr_debug(message: str):
 
 def _pr_error(message: str):
     print(f"\033[91m[ERROR] {message}\033[0m")
+

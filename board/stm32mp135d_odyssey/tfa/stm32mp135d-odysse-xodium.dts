@@ -18,7 +18,7 @@
 
 / {
 	model = "Seeed STM32MP135D Odyssey Board";
-	compatible = "st,stm32mp135d-odyssey", "st,stm32mp135f-dk", "st,stm32mp135";
+	compatible = "st,stm32mp135d-odyssey_dev_minimal_dt-mx", "st,stm32mp135";
 
 	aliases {
 		serial0 = &uart4;
