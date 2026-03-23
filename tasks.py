@@ -80,7 +80,7 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
         configure(c, config)
 
     with c.cd("build/buildroot"):
-        c.run("make BR2_DL_DIR=../build/third_party")
+        c.run("make BR2_DL_DIR=../../build/third_party")
 
     _pr_info(f"Building BSP completed")
 
