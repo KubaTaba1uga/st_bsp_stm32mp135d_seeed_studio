@@ -1,0 +1,18 @@
+# Name of your project
+PROJECT_NAME           = "Seeed studio STM32MP135D BSP using ST stack"
+
+# Recurse into subdirectories
+RECURSIVE              = YES
+
+# We must generate XML for Breathe
+GENERATE_XML           = YES
+
+# Where to put Doxygen output (XML will go into build/doxygen/xml)
+OUTPUT_DIRECTORY       = build/doxygen
+XML_OUTPUT             = xml
+
+# Optional
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES
+EXTRACT_ALL            = YES
+EXCLUDE_PATTERNS       = */third_party/* */build/*

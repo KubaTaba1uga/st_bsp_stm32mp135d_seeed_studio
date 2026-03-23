@@ -1,0 +1,183 @@
+import os
+
+from invoke import task
+
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+BUILD_PATH = os.path.join(ROOT_PATH, "build")
+DOCS_PATH = os.path.join(ROOT_PATH, "docs")
+
+os.chdir(ROOT_PATH)
+os.environ["PATH"] = f"{os.path.join(ROOT_PATH, '.venv', 'bin')}:{os.environ['PATH']}"
+
+
+@task
+def install(c):
+    _pr_info(f"Installing dependencies...")
+
+    try:
+        c.run(
+            "sudo apt-get install -y doxygen virtualenv \
+              which sed make binutils build-essential diffutils \
+              gcc g++ bash patch gzip bzip2 perl tar cpio \
+              unzip rsync file bc findutils gawk curl \
+              git libncurses5-dev python3"
+        )
+
+        c.run("virtualenv .venv")
+        c.run(
+            "pip install invoke myst-parser==5.0.0 sphinx==8.2.3 breathe==4.36.0 sphinx_rtd_theme==3.0.2 sphinx-autobuild==2025.08.25"
+        )
+
+    except Exception:
+        _pr_error("Installing failed")
+        raise
+
+    _pr_info(f"Installing dependencies completed")
+
+
+@task
+def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
+    """
+    @todo change config="ebook_reader_dev_defconfig" to config="ebook_reader_defconfig"
+          dev build should not be default.
+
+    @todo download repos only if dev config
+    @todo get urls and versions from config file
+    """
+    repos = {
+        "buildroot": {
+            "tag": "st/2024.02.9",
+            "url": "https://github.com/bootlin/buildroot.git",
+        },
+        "linux": {
+            "tag": "v6.6-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/linux.git",
+        },
+        "u-boot": {
+            "tag": "v2023.10-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/u-boot.git",
+        },
+        "optee-os": {
+            "tag": "4.0.0-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/optee_os.git",
+        },
+        "tf-a": {
+            "tag": "v2.10-stm32mp-r2",
+            "url": "https://github.com/STMicroelectronics/arm-trusted-firmware.git",
+        },
+    }
+    _pr_info(f"Building BSP...")
+
+    if "dev" in config:
+        c.run("mkdir -p third_party")
+        with c.cd("third_party"):
+            for repo, rdata in repos.items():
+                c.run(f"git clone {rdata['url']} {repo} || true")
+                with c.cd(repo):
+                    c.run(f"git checkout {rdata['tag']}")
+
+    if config:
+        configure(c, config)
+
+    with c.cd("build/buildroot"):
+        c.run("make BR2_DL_DIR=../build/third_party")
+
+    _pr_info(f"Building BSP completed")
+
+
+@task
+def configure(c, config="stm32mp135d_odyssey_dev_defconfig"):
+    _pr_info(f"Configuring buildroot...")
+
+    with c.cd("third_party/buildroot"):
+        flags = [
+            "O=../../build/buildroot",
+            "BR2_EXTERNAL=../../.",
+            config,
+        ]
+
+        c.run(f"make " + " ".join(flags))
+
+    _pr_info(f"Configuring buildroot completed")
+
+
+@task
+def docs_build(c):
+    _pr_info("Building docs...")
+
+    docs_path = os.path.join(BUILD_PATH, "docs", "html")
+
+    c.run("mkdir -p %s" % BUILD_PATH)
+    try:
+        c.run("doxygen docs/Doxyfile")
+        with c.cd(DOCS_PATH):
+            c.run(f"sphinx-build -b html . {docs_path}")
+    except Exception:
+        _pr_error(f"Building docs failed")
+        raise
+
+    _pr_info("Building docs completed")
+
+
+@task
+def docs_serve(c, port=8000):
+    _pr_info("Serving docs...")
+
+    docs_build(c)
+
+    c.run(
+        " ".join(
+            [
+                f"sphinx-autobuild",
+                f"--port {port}",
+                f"docs build/docs/html",
+            ]
+        ),
+        pty=True,
+    )
+
+    _pr_info("Serving docs completed")
+
+
+@task
+def deploy_sdcard(c, dev="sda"):
+    _pr_info(f"Deploying to sdcard...")
+
+    if not os.path.exists("/dev/disk/by-partlabel/fsbl1"):
+        raise ValueError("No /dev/disk/by-partlabel/fsbl1")
+    if not os.path.exists("/dev/disk/by-partlabel/fsbl2"):
+        raise ValueError("No /dev/disk/by-partlabel/fsbl2")
+    if not os.path.exists("/dev/disk/by-partlabel/fip"):
+        raise ValueError("No /dev/disk/by-partlabel/fip")
+
+    with c.cd("build/buildroot/images"):
+        c.run(
+            "sudo dd if=tf-a-stm32mp135d-odyssey_dev_minimal_dt-mx.stm32 of=/dev/disk/by-partlabel/fsbl1 bs=1K conv=fsync"
+        )
+        c.run(
+            "sudo dd if=tf-a-stm32mp135d-odyssey_dev_minimal_dt-mx.stm32 of=/dev/disk/by-partlabel/fsbl2 bs=1K conv=fsync"
+        )
+        c.run("sudo dd if=fip.bin of=/dev/disk/by-partlabel/fip bs=1K conv=fsync")
+
+    c.run("sudo sync")
+
+    _pr_info(f"Deploy to sdcard completed")
+
+###############################################
+#                Private API                  #
+###############################################
+def _pr_info(message: str):
+    print(f"\033[94m[INFO] {message}\033[0m")
+
+
+def _pr_warn(message: str):
+    print(f"\033[93m[WARN] {message}\033[0m")
+
+
+def _pr_debug(message: str):
+    print(f"\033[96m[DEBUG] {message}\033[0m")
+
+
+def _pr_error(message: str):
+    print(f"\033[91m[ERROR] {message}\033[0m")
+
