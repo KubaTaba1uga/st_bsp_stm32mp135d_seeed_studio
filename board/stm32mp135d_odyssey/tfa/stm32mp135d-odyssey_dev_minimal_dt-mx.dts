@@ -236,6 +236,7 @@
 		CLK_UART4_HSI
 		CLK_SDMMC1_HSI		
 	>;
+	
 	st,clkdiv = <
 		DIV(DIV_MPU, 1)
 		DIV(DIV_AXI, 0)
@@ -247,10 +248,11 @@
 		DIV(DIV_APB5, 0)
 		DIV(DIV_APB6, 0)
 	>;
+	
 	st,pll_vco {
-		pll2_vco_800Mhz: pll2-vco-800Mhz {
+		pll2_vco_1056Mhz: pll2-vco-1056Mhz {
 			src = < CLK_PLL12_HSI >;
-			divmn = < 3 24 >;
+			divmn = < 3 32 >;
 		};
 		/* USER CODE BEGIN rcc_st-pll_vco */
 		/* USER CODE END rcc_st-pll_vco */
@@ -263,13 +265,12 @@
 		st,pll = < &pll2_cfg1 >;
 
 		pll2_cfg1: pll2_cfg1 {
-			st,pll_vco = < &pll2_vco_800Mhz >;
+			st,pll_vco = < &pll2_vco_1056Mhz >;
 			st,pll_div_pqr = < 1 1 0 >;
 		};
 		/* USER CODE BEGIN pll2 */
 		/* USER CODE END pll2 */
 	};
-
 };
 
 &pwr_regulators {
@@ -314,5 +315,10 @@
 
 &rng {
 	status = "okay";
+};
+
+&ddr {
+	vdd-supply = <&vdd_ddr>;
+	vref-supply = <&vref_ddr>;
 };
 /* USER CODE END addons */
