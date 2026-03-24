@@ -77,35 +77,35 @@
 	};
 	/* USER CODE END root */
 
-	/* clocks { */
-	/* 	/\* USER CODE BEGIN clocks *\/ */
-	/* 	/\* USER CODE END clocks *\/ */
+	clocks {
+		/* USER CODE BEGIN clocks */
+		/* USER CODE END clocks */
 
-	/* 	clk_hsi: clk-hsi { */
-	/* 		clock-frequency = <64000000>; */
+		clk_hsi: clk-hsi {
+			clock-frequency = <64000000>;
 
-	/* 		/\* USER CODE BEGIN clk_hsi *\/ */
-	/* 		/\* USER CODE END clk_hsi *\/ */
-	/* 	}; */
-	/* 	clk_lse: clk-lse { */
-	/* 		status = "disabled"; */
+			/* USER CODE BEGIN clk_hsi */
+			/* USER CODE END clk_hsi */
+		};
+		clk_lse: clk-lse {
+			status = "disabled";
 
-	/* 		/\* USER CODE BEGIN clk_lse *\/ */
-	/* 		/\* USER CODE END clk_lse *\/ */
-	/* 	}; */
-	/* 	clk_hse: clk-hse { */
-	/* 		status = "disabled"; */
+			/* USER CODE BEGIN clk_lse */
+			/* USER CODE END clk_lse */
+		};
+		clk_hse: clk-hse {
+			status = "disabled";
    
-	/* 		/\* USER CODE BEGIN clk_hse *\/ */
-	/* 		/\* USER CODE END clk_hse *\/ */
-	/* 	}; */
-	/* 	clk_i2sin: clk-i2sin { */
-	/* 		status = "disabled"; */
+			/* USER CODE BEGIN clk_hse */
+			/* USER CODE END clk_hse */
+		};
+		clk_i2sin: clk-i2sin {
+			status = "disabled";
 
-	/* 		/\* USER CODE BEGIN clk_i2sin *\/ */
-	/* 		/\* USER CODE END clk_i2sin *\/ */
-	/* 	}; */
-	/* }; */
+			/* USER CODE BEGIN clk_i2sin */
+			/* USER CODE END clk_i2sin */
+		};
+	};
 }; /* root */
 
 /* Warning: the configuration of the secured GPIOs should be added in (addons) User Section */
@@ -196,7 +196,6 @@
 	system_off_soc_mode = <STM32_PM_SHUTDOWN>;
 	vdd-supply = <&vdd>;
 	vdd_3v3_usbfs-supply = <&vdd_usb>;
-	/* vddcore-supply = <&vddcore>;	 */
 	/* USER CODE END pwr_regulators */
 };
 
@@ -541,18 +540,6 @@
 
 &sdmmc1_io {
 	vddsd1-supply = <&vdd_sd>;
-};
-
-&tzc400 {
-};
-
-&rng {
-	status = "okay";
-	clock-error-detect;
-};
-
-&rtc {
-	status = "okay";
 };
 /* USER CODE END addons */
 
