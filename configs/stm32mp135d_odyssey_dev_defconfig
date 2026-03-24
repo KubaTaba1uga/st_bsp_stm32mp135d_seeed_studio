@@ -31,8 +31,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BR2_EXTERNAL_ST_PATH)/board/old/utilities/geni
 #                  TF-A                      #
 ##############################################
 BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-# BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-# BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,STMicroelectronics,arm-trusted-firmware)v2.10-stm32mp-r2.tar.gz"
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/arm-trusted-firmware.git"
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.10-stm32mp-r2"
