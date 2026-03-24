@@ -124,6 +124,8 @@
 
 	/* USER CODE BEGIN pinctrl */
 	wakeup_pins: wakeup_pins {
+		// @todo: PMIC_INIT is absent from hardware.md, we should add it as well as schematics.
+		//        it would be nice to describe better what this pin do, as well as wakeup pins.
 		wakeup_pin_1: pins1 {
 			pinmux = <STM32_PINMUX('F', 8, GPIO)>;	// PMIC_INT
 			bias-pull-up;
