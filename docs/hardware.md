@@ -116,3 +116,60 @@ The SD card slot is missing from the picture because it is on the other side of 
 ![Circuit diagram for Micro SD card](assets/sd_card_schematics_3.png)
 
 ![Circuit diagram for Micro SD card](assets/sd_card_schematics_4.png)
+
+
+PMIC
+-----
+
+PMIC (STPMIC1DPQR) has a lot of wires so, let's split them in two groups: power control and power supply.
+PMIC model is STPMIC1DPQR which datasheet is available [here](path:./assets/stpmic1.pdf).
+
+Power control allow us configuring board voltages on the fly, while the system is already running. PMIC has it's own non volataile
+memory, meaning the setiings are persitent across reboots. Among the wires we have IIC4_SDA (i2c SDA), IIC4_SCL (i2c clock), 
+POWER_ON (power switch), SYS_RESET (reset switch), PMIC_WAKEUP (power switch for host processor). 
+
+```{csv-table} PMIC pinnout
+:header: >
+:    "Func", "Ball", "Chip Pin", "Description"
+:widths: 20, 10, 25, 35
+
+"IIC4_SDA", "C6", "GPIOB pin 7", "I2C4 data line"
+"IIC4_SCL", "A9", "GPIOE pin 15", "I2C4 clock line"
+"POWER_ON", "U17", "", "Power on input"
+"SYS_RESET", "Y11", "", "System reset input"
+"PMIC_WAKEUP", "M3", "GPIOC pin 13", "PMIC wake-up signal"
+"WAKEUP", "", "", "Wake up input"
+```
+
+![Circuit diagram for PMIC](assets/pmic_schematics_0.png)
+
+![Circuit diagram for PMIC](assets/pmic_schematics_1.png)
+
+![Circuit diagram for PMIC](assets/pmic_schematics_2.png)
+
+![Circuit diagram for PMIC](assets/pmic_schematics_3.png)
+
+![Circuit diagram for PMIC](assets/pmic_schematics_4.png)
+
+![Circuit diagram for PMIC](assets/pmic_schematics_5.png)
+
+Power supply are pins used for providing appropriate voltages for our board. Each pin can be configured to different voltage, allowing to combine components operating at different voltage levels. Among the rails we have core supplies, peripheral supplies, reference voltages, and switched outputs, each tailored for specific subsystems such as CPU, DDR memory, ADC, USB, and external interfaces.
+
+```{csv-table} PMIC voltages
+:header: >
+:    "Rail", "Source", "Voltage", "Max Current"
+:widths: 25, 25, 20, 20
+
+"VDD_CPU", "buck 1 out", "1.2V", "1.5A"
+"VDD_DDR", "buck 2 out", "1.1V", "1A"
+"VDD_3V3", "buck 3 out", "3.3V", "0.5A"
+"VDD_CORE", "buck 4 out", "1.2V", "2A"
+"3V3_SW", "sw out", "3.3V", "0.5A"
+"VREF_DDR", "vref", "0.675V", "0.05A"
+"VDC_ADC_1V8", "ldo 1 out", "1.8V", "0.35A"
+"VDD_USB_3V3", "ldo 4 out", "3.3V", "0.1A"
+"VDD_SD_3V3", "ldo 5 out", "3.3V", "0.35A"
+"1V_PERIPH", "ldo 6 out", "1V", "0.15A"
+```
+
+![Circuit diagram for PMIC](assets/pmic_schematics_6.png)

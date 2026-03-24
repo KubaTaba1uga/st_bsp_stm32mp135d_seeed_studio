@@ -20,10 +20,11 @@ def main():
             log = log.replace(addr, translation)
 
     print(log)
+    
 def parse_args():
     parser = argparse.ArgumentParser(
-    prog='OpteeCrashTranslator',
-    description='Translate memory addresses in optee crash')
+    prog='translate_optee_crash.py',
+    description='Translate memory addresses in optee crash into functions, files and line numbers.')
 
     parser.add_argument('filename')
     return parser.parse_args()

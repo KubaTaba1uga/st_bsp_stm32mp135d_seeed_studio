@@ -94,7 +94,7 @@
 		};
 		clk_hse: clk-hse {
 			status = "disabled";
-
+   
 			/* USER CODE BEGIN clk_hse */
 			/* USER CODE END clk_hse */
 		};
@@ -468,6 +468,10 @@
 };
 
 /* USER CODE BEGIN addons */
+&cpu0 {
+	cpu-supply = <&vddcpu>;
+};
+
 &scmi_regu {
 	scmi_vddcpu: voltd-vddcpu {
 		reg = <VOLTD_SCMI_STPMIC1_BUCK1>;
@@ -485,15 +489,15 @@
 		reg = <VOLTD_SCMI_STPMIC1_LDO1>;
 		voltd-supply = <&adc_v1v8>;
 	};
-	scmi_vdd_usb: voltd-vdd_usb {
+	scmi_vdd_usb: voltd-vdd-usb {
 		reg = <VOLTD_SCMI_STPMIC1_LDO4>;
 		voltd-supply = <&vdd_usb>;
 	};
-	scmi_vdd_sd: voltd-vdd_sd {
+	scmi_vdd_sd: voltd-vdd-sd {
 		reg = <VOLTD_SCMI_STPMIC1_LDO5>;
 		voltd-supply = <&vdd_sd>;
 	};
-	scmi_v3v3_sw: voltd-v3v3_sw {
+	scmi_v3v3_sw: voltd-v3v3-sw {
 		reg = <VOLTD_SCMI_STPMIC1_PWR_SW2>;
 		voltd-supply = <&v3v3_sw>;
 	};
@@ -505,14 +509,16 @@
 	status = "okay";
 };
 
-&osc_calibration {
-	hsi-calibration{
-		status = "okay";
-	};
-};
-
 &gpioc {
 	st,protreg = < (TZPROT(13)) >;
+};
+
+&gpiob {
+	st,protreg = < (TZPROT(7)) >;
+};
+
+&gpioe {
+	st,protreg = < (TZPROT(15)) >;
 };
 
 &sdmmc2_io {
