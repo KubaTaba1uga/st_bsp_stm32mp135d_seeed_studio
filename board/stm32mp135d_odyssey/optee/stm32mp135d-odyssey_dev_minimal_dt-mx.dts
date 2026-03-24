@@ -482,6 +482,8 @@
 /* USER CODE BEGIN addons */
 &cpu0 {
 	cpu-supply = <&vddcpu>;
+        operating-points-v2 = <>; // We disable OPP because of our HSI usage for bringup
+	                          // @todo: set appropriate opp
 };
 
 &scmi_regu {
@@ -552,6 +554,5 @@
 &rtc {
 	status = "okay";
 };
-
 /* USER CODE END addons */
 
