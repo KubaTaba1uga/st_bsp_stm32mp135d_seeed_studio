@@ -212,12 +212,6 @@
 	clock-frequency = <400000>;
 	
 	pmic: stpmic@33 {
-		/* compatible = "st,stpmic1"; */
-		/* reg = <0x33>; */
-		/* status = "okay"; */
-		/* st,wakeup-pin-number = <1>; */
-		/* st,notif-it-id = <0>; */
-
 		compatible = "st,stpmic1";
 		reg = <0x33>;
 		status = "okay";
