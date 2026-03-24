@@ -77,35 +77,35 @@
 	};
 	/* USER CODE END root */
 
-	clocks {
-		/* USER CODE BEGIN clocks */
-		/* USER CODE END clocks */
+	/* clocks { */
+	/* 	/\* USER CODE BEGIN clocks *\/ */
+	/* 	/\* USER CODE END clocks *\/ */
 
-		clk_hsi: clk-hsi {
-			clock-frequency = <64000000>;
+	/* 	clk_hsi: clk-hsi { */
+	/* 		clock-frequency = <64000000>; */
 
-			/* USER CODE BEGIN clk_hsi */
-			/* USER CODE END clk_hsi */
-		};
-		clk_lse: clk-lse {
-			status = "disabled";
+	/* 		/\* USER CODE BEGIN clk_hsi *\/ */
+	/* 		/\* USER CODE END clk_hsi *\/ */
+	/* 	}; */
+	/* 	clk_lse: clk-lse { */
+	/* 		status = "disabled"; */
 
-			/* USER CODE BEGIN clk_lse */
-			/* USER CODE END clk_lse */
-		};
-		clk_hse: clk-hse {
-			status = "disabled";
+	/* 		/\* USER CODE BEGIN clk_lse *\/ */
+	/* 		/\* USER CODE END clk_lse *\/ */
+	/* 	}; */
+	/* 	clk_hse: clk-hse { */
+	/* 		status = "disabled"; */
    
-			/* USER CODE BEGIN clk_hse */
-			/* USER CODE END clk_hse */
-		};
-		clk_i2sin: clk-i2sin {
-			status = "disabled";
+	/* 		/\* USER CODE BEGIN clk_hse *\/ */
+	/* 		/\* USER CODE END clk_hse *\/ */
+	/* 	}; */
+	/* 	clk_i2sin: clk-i2sin { */
+	/* 		status = "disabled"; */
 
-			/* USER CODE BEGIN clk_i2sin */
-			/* USER CODE END clk_i2sin */
-		};
-	};
+	/* 		/\* USER CODE BEGIN clk_i2sin *\/ */
+	/* 		/\* USER CODE END clk_i2sin *\/ */
+	/* 	}; */
+	/* }; */
 }; /* root */
 
 /* Warning: the configuration of the secured GPIOs should be added in (addons) User Section */
@@ -116,6 +116,8 @@
 				 <STM32_PINMUX('E', 15, AF6)>; /* I2C4_SCL */
 			bias-disable;
 			drive-open-drain;
+			/* bias-pull-up; */
+                 	/* drive-push-pull;			 */
 			slew-rate = <0>;
 		};
 	};
@@ -125,6 +127,9 @@
 		wakeup_pin_1: pins1 {
 			pinmux = <STM32_PINMUX('F', 8, GPIO)>;	// PMIC_INT
 			bias-pull-up;
+		};
+		wakeup_pin_2: pins2 {
+			pinmux = <STM32_PINMUX('I', 3, GPIO)>;	// ETH1_WKUP
 		};
 		wakeup_pin_3: pins3 {
 			pinmux = <STM32_PINMUX('C', 13, GPIO)>;	// PMIC_WAKEUP
@@ -191,6 +196,7 @@
 	system_off_soc_mode = <STM32_PM_SHUTDOWN>;
 	vdd-supply = <&vdd>;
 	vdd_3v3_usbfs-supply = <&vdd_usb>;
+	/* vddcore-supply = <&vddcore>;	 */
 	/* USER CODE END pwr_regulators */
 };
 
@@ -205,10 +211,16 @@
 	clock-frequency = <400000>;
 	
 	pmic: stpmic@33 {
+		/* compatible = "st,stpmic1"; */
+		/* reg = <0x33>; */
+		/* status = "okay"; */
+		/* st,wakeup-pin-number = <1>; */
+		/* st,notif-it-id = <0>; */
+
 		compatible = "st,stpmic1";
 		reg = <0x33>;
 		status = "okay";
-		interrupts-extended = <&exti 55 IRQ_TYPE_EDGE_FALLING>;
+		interrupts-extended = <&exti 8 IRQ_TYPE_EDGE_FALLING>;
 		wakeup-source;
 		st,pmic-it-id = <IT_PONKEY_F IT_PONKEY_R>;
 		st,notif-it-id = <0 2>;
@@ -372,257 +384,100 @@
 	/* USER CODE END i2c4 */
 };
 
-
 &rcc {
-	compatible = "st,stm32mp13-rcc", "syscon", "st,stm32mp13-rcc-mco";
-	pinctrl-0 = <&rcc_mco_pins_a>;
-	pinctrl-names = "default";
-
+	status = "okay";
+	clocks = <&clk_hsi>, <&clk_lsi>, <&clk_csi>;
+	clock-names = "clk-hsi", "clk-lsi", "clk-csi";
 	st,clksrc = <
-		CLK_MPU_PLL1P
-		CLK_AXI_PLL2P
-		CLK_MLAHBS_PLL3
-		CLK_RTC_LSE
-		CLK_MCO1_HSE
+		CLK_MPU_HSI
+		CLK_AXI_HSI
+		CLK_MLAHBS_HSI
+		CLK_RTC_LSI
+		CLK_MCO1_DISABLED
 		CLK_MCO2_DISABLED
-		CLK_CKPER_HSE
-		CLK_ETH1_PLL4P
-		CLK_ETH2_PLL4P
-		CLK_SDMMC1_PLL4P
-		CLK_SDMMC2_PLL4P
-		CLK_STGEN_HSE
-		CLK_USBPHY_HSE
+		CLK_CKPER_DISABLED
+		CLK_SDMMC1_HSI
+		CLK_STGEN_HSI
 		CLK_I2C4_HSI
-		CLK_I2C5_HSI
-		CLK_USBO_USBPHY
-		CLK_ADC2_CKPER
-		CLK_I2C12_HSI
-		CLK_UART1_HSI
-		CLK_UART2_HSI
-		CLK_UART35_HSI
 		CLK_UART4_HSI
-		CLK_UART6_HSI
-		CLK_UART78_HSI
-		CLK_DCMIPP_PLL2Q
-		CLK_LPTIM3_PCLK3
-		CLK_RNG1_PLL4R
 	>;
-
 	st,clkdiv = <
 		DIV(DIV_MPU, 1)
 		DIV(DIV_AXI, 0)
 		DIV(DIV_MLAHB, 0)
-		DIV(DIV_APB1, 1)
-		DIV(DIV_APB2, 1)
-		DIV(DIV_APB3, 1)
-		DIV(DIV_APB4, 1)
-		DIV(DIV_APB5, 2)
-		DIV(DIV_APB6, 1)
+		DIV(DIV_APB1, 0)
+		DIV(DIV_APB2, 0)
+		DIV(DIV_APB3, 0)
+		DIV(DIV_APB4, 0)
+		DIV(DIV_APB5, 0)
+		DIV(DIV_APB6, 0)
 		DIV(DIV_RTC, 0)
 		DIV(DIV_MCO1, 0)
 		DIV(DIV_MCO2, 0)
 	>;
-
 	st,pll_vco {
-		pll1_vco_2000Mhz: pll1-vco-2000Mhz {
-			src = <CLK_PLL12_HSE>;
-			divmn = <1 82>;
-			frac = <0xAAA>;
+		pll2_vco_1056Mhz: pll2-vco-1056Mhz {
+			src = < CLK_PLL12_HSI >;
+			divmn = < 3 32 >;
 		};
-
-		pll1_vco_1300Mhz: pll1-vco-1300Mhz {
-			src = <CLK_PLL12_HSE>;
-			divmn = <2 80>;
-			frac = <0x800>;
-		};
-
-		pll2_vco_1066Mhz: pll2-vco-1066Mhz {
-			src = <CLK_PLL12_HSE>;
-			divmn = <2 65>;
-			frac = <0x1400>;
-		};
-
-		pll3_vco_417Mhz: pll3-vco-417Mhz {
-			src = <CLK_PLL3_HSE>;
-			divmn = <1 33>;
-			frac = <0x1a04>;
-		};
-
-		pll4_vco_600Mhz: pll4-vco-600Mhz {
-			src = <CLK_PLL4_HSE>;
-			divmn = <1 49>;
-		};
+		/* USER CODE BEGIN rcc_st-pll_vco */
+		/* USER CODE END rcc_st-pll_vco */
 	};
 
-	/* VCO = 1300.0 MHz => P = 650 (CPU) */
-	pll1: st,pll@0 {
-		compatible = "st,stm32mp1-pll";
-		reg = <0>;
-
-		st,pll = <&pll1_cfg1>;
-
-		pll1_cfg1: pll1_cfg1 {
-			st,pll_vco = <&pll1_vco_1300Mhz>;
-			st,pll_div_pqr = <0 1 1>;
-		};
-
-		pll1_cfg2: pll1_cfg2 {
-			st,pll_vco = <&pll1_vco_2000Mhz>;
-			st,pll_div_pqr = <0 1 1>;
-		};
-	};
-
-	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 266, R = 533 (DDR) */
-	pll2: st,pll@1 {
+	pll2:st,pll@1 {
 		compatible = "st,stm32mp1-pll";
 		reg = <1>;
 
-		st,pll = <&pll2_cfg1>;
+		st,pll = < &pll2_cfg1 >;
 
 		pll2_cfg1: pll2_cfg1 {
-			st,pll_vco = <&pll2_vco_1066Mhz>;
-			st,pll_div_pqr = <1 1 0>;
+			st,pll_vco = < &pll2_vco_1056Mhz >;
+			st,pll_div_pqr = < 1 1 0 >;
 		};
+		/* USER CODE BEGIN pll2 */
+		/* USER CODE END pll2 */
 	};
 
-	/* VCO = 417.8 MHz => P = 209, Q = 24, R = 11 */
-	pll3: st,pll@2 {
-		compatible = "st,stm32mp1-pll";
-		reg = <2>;
-
-		st,pll = <&pll3_cfg1>;
-
-		pll3_cfg1: pll3_cfg1 {
-			st,pll_vco = <&pll3_vco_417Mhz>;
-			st,pll_div_pqr = <1 16 36>;
-		};
-	};
-
-	/* VCO = 600.0 MHz => P = 50, Q = 10, R = 50 */
-	pll4: st,pll@3 {
-		compatible = "st,stm32mp1-pll";
-		reg = <3>;
-		st,pll = <&pll4_cfg1>;
-
-		pll4_cfg1: pll4_cfg1 {
-			st,pll_vco = <&pll4_vco_600Mhz>;
-			st,pll_div_pqr = <11 59 11>;
-		};
-	};
 
 	st,clk_opp {
-		/* CK_MPU clock config for MP13 */
 		st,ck_mpu {
+			cfg_1 {
+				hz = < 64000000 >;
+				st,clksrc = < CLK_MPU_HSI >;
+			};
+			/* USER CODE BEGIN rcc_st-ck_mpu */
+			/* USER CODE END rcc_st-ck_mpu */
+		};
+
+		/* CK_AXI clock config for MP13 */
+		st,ck_axi {
 
 			cfg_1 {
-				hz = <650000000>;
-				st,clksrc = <CLK_MPU_PLL1P>;
-				st,pll = <&pll1_cfg1>;
+				hz = < 64000000 >;
+				st,clksrc = < CLK_AXI_HSI >;
+				st,clkdiv = < DIV(DIV_AXI, 0) >;
+			};
+			/* USER CODE BEGIN rcc_st-ck_axi */
+			/* USER CODE END rcc_st-ck_axi */
+		};
+
+		/* CK_MLAHBS clock config for MP13 */
+		st,ck_mlahbs {
+
+			cfg_1 {
+				hz = < 64000000 >;
+				st,clksrc = < CLK_MLAHBS_HSI >;
+				st,clkdiv = < DIV(DIV_MLAHB, 0) >;
 			};
 
-			cfg_2 {
-				hz = <1000000000>;
-				st,clksrc = <CLK_MPU_PLL1P>;
-				st,pll = <&pll1_cfg2>;
-			};
+			/* USER CODE BEGIN rcc_st-ck_mlahbs */
+			/* USER CODE END rcc_st-ck_mlahbs */
 		};
 	};
+
+	/* USER CODE BEGIN rcc */
+	/* USER CODE END rcc */
 };
-
-// &rcc {
-// 	status = "okay";
-// 	clocks = <&clk_hsi>, <&clk_lsi>, <&clk_csi>;
-// 	clock-names = "clk-hsi", "clk-lsi", "clk-csi";
-// 	st,clksrc = <
-// 		CLK_MPU_HSI
-// 		CLK_AXI_HSI
-// 		CLK_MLAHBS_HSI
-// 		CLK_RTC_LSI
-// 		CLK_MCO1_DISABLED
-// 		CLK_MCO2_DISABLED
-// 		CLK_CKPER_DISABLED
-// 		CLK_SDMMC1_HSI
-// 		CLK_STGEN_HSI
-// 		CLK_I2C4_HSI
-// 		CLK_UART4_HSI
-// 	>;
-// 	st,clkdiv = <
-// 		DIV(DIV_MPU, 1)
-// 		DIV(DIV_AXI, 0)
-// 		DIV(DIV_MLAHB, 0)
-// 		DIV(DIV_APB1, 0)
-// 		DIV(DIV_APB2, 0)
-// 		DIV(DIV_APB3, 0)
-// 		DIV(DIV_APB4, 0)
-// 		DIV(DIV_APB5, 0)
-// 		DIV(DIV_APB6, 0)
-// 		DIV(DIV_RTC, 0)
-// 		DIV(DIV_MCO1, 0)
-// 		DIV(DIV_MCO2, 0)
-// 	>;
-// 	st,pll_vco {
-// 		pll2_vco_1056Mhz: pll2-vco-1056Mhz {
-// 			src = < CLK_PLL12_HSI >;
-// 			divmn = < 3 32 >;
-// 		};
-// 		/* USER CODE BEGIN rcc_st-pll_vco */
-// 		/* USER CODE END rcc_st-pll_vco */
-// 	};
-
-// 	pll2:st,pll@1 {
-// 		compatible = "st,stm32mp1-pll";
-// 		reg = <1>;
-
-// 		st,pll = < &pll2_cfg1 >;
-
-// 		pll2_cfg1: pll2_cfg1 {
-// 			st,pll_vco = < &pll2_vco_1056Mhz >;
-// 			st,pll_div_pqr = < 1 1 0 >;
-// 		};
-// 		/* USER CODE BEGIN pll2 */
-// 		/* USER CODE END pll2 */
-// 	};
-
-
-// 	st,clk_opp {
-// 		st,ck_mpu {
-// 			cfg_1 {
-// 				hz = < 64000000 >;
-// 				st,clksrc = < CLK_MPU_HSI >;
-// 			};
-// 			/* USER CODE BEGIN rcc_st-ck_mpu */
-// 			/* USER CODE END rcc_st-ck_mpu */
-// 		};
-
-// 		/* CK_AXI clock config for MP13 */
-// 		st,ck_axi {
-
-// 			cfg_1 {
-// 				hz = < 64000000 >;
-// 				st,clksrc = < CLK_AXI_HSI >;
-// 				st,clkdiv = < DIV(DIV_AXI, 0) >;
-// 			};
-// 			/* USER CODE BEGIN rcc_st-ck_axi */
-// 			/* USER CODE END rcc_st-ck_axi */
-// 		};
-
-// 		/* CK_MLAHBS clock config for MP13 */
-// 		st,ck_mlahbs {
-
-// 			cfg_1 {
-// 				hz = < 64000000 >;
-// 				st,clksrc = < CLK_MLAHBS_HSI >;
-// 				st,clkdiv = < DIV(DIV_MLAHB, 0) >;
-// 			};
-
-// 			/* USER CODE BEGIN rcc_st-ck_mlahbs */
-// 			/* USER CODE END rcc_st-ck_mlahbs */
-// 		};
-// 	};
-
-// 	/* USER CODE BEGIN rcc */
-// 	/* USER CODE END rcc */
-// };
 
 /* USER CODE BEGIN addons */
 &cpu0 {
