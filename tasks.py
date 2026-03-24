@@ -163,6 +163,7 @@ def deploy_sdcard(c, dev="sda"):
 
     _pr_info(f"Deploy to sdcard completed")
 
+    
 ###############################################
 #                Private API                  #
 ###############################################
