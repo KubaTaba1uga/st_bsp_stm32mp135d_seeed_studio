@@ -478,7 +478,7 @@
 &cpu0 {
 	cpu-supply = <&vddcpu>;
         operating-points-v2 = <>; // We disable OPP because of our HSI usage for bringup
-	                          // @todo: set appropriate opp
+	                          // @todo: set appropriate opp and enable HSE
 };
 
 &scmi_regu {
