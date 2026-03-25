@@ -9,6 +9,7 @@
  */
 
 /* USER CODE BEGIN includes */
+#include "stm32mp13-u-boot.dtsi"
 /* USER CODE END includes */
 
 / {
@@ -19,5 +20,18 @@
 }; /*root*/
 
 /* USER CODE BEGIN addons */
+&uart4 {
+	bootph-all;
+};
+
+&uart4_pins_mx {
+	bootph-all;
+	pins1 {
+		bootph-all;
+	};
+	pins2 {
+		bootph-all;
+	};
+};
 /* USER CODE END addons */
 

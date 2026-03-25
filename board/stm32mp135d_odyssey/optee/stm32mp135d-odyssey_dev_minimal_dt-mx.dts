@@ -146,7 +146,20 @@
 		wakeup_pin_6: pins6 {
 			pinmux = <STM32_PINMUX('C', 2, GPIO)>;	// NC
 		};
-	};	
+	};
+
+	uart4_pins_mx: uart4-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX_NSEC('A', 13, AF8)>; /* UART4_TX */
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <0>;
+		};
+		pins2 {
+			pinmux = <STM32_PINMUX_NSEC('E', 5, AF8)>; /* UART4_RX */
+			bias-disable;
+		};
+	};
 	/* USER CODE END pinctrl */
 };
 
@@ -165,7 +178,7 @@
 	/*"Non Secured" peripherals*/
 	DECPROT(STM32MP1_ETZPC_SDMMC1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	/*"Secured" peripherals*/
-	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)	
+	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 
 	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
@@ -469,7 +482,6 @@
 			/* USER CODE END rcc_st-ck_mlahbs */
 		};
 	};
-
 	/* USER CODE BEGIN rcc */
 	/* USER CODE END rcc */
 };
@@ -536,6 +548,12 @@
 
 &sdmmc1_io {
 	vddsd1-supply = <&vdd_sd>;
+};
+
+&uart4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart4_pins_mx>;
+	status = "okay";
 };
 /* USER CODE END addons */
 
