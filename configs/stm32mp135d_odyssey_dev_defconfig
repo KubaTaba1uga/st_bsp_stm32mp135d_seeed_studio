@@ -10,6 +10,7 @@ BR2_CCACHE=y
 BR2_TARGET_GENERIC_HOSTNAME="ebook_reader"
 BR2_PACKAGE_OVERRIDE_FILE="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/dev/local.mk"
 
+
 ##############################################
 #                  Toolchain                 #
 ##############################################
@@ -17,15 +18,21 @@ BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
 
+
 ##############################################
 #                  Rootfs                    #
 ##############################################
 BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-# BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_ST_PATH)/board/ebook_reader/overlay/"
+# BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/overlay/"
 BR2_TARGET_ROOTFS_TAR=y
 BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_ST_PATH)/board/old/scripts/rootfs_postbuild.sh"
 BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
 BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BR2_EXTERNAL_ST_PATH)/board/old/utilities/genimage.cfg"
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+BR2_TARGET_ROOTFS_EXT2_SIZE="60M"
+
 
 ##############################################
 #                  TF-A                      #
@@ -45,6 +52,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/tfa/*"
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
 
+
 ##############################################
 #                  Optee OS                  #
 ##############################################
@@ -59,21 +67,30 @@ BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
 BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/optee/*"
 BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_EMBED_DTB_SOURCE_FILE=stm32mp135d-odyssey_dev_minimal_dt-mx.dts CFG_STM32MP13=y CFG_WITH_TUI=n CFG_DRAM_SIZE=0x20000000" # Enable debug with: CFG_TEE_CORE_LOG_LEVEL=3 DEBUG=1
 
+
 ##############################################
 #                  U-boot                    #
 ##############################################
 BR2_TARGET_UBOOT=y
 BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 BR2_TARGET_UBOOT_CUSTOM_GIT=y
-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="ssh://gitea@gitVm.lab:2222/taba1uga/st-uboot.git"
-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2022.10-stm32mp-odyssey-r2"
+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/u-boot.git"
+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2023.10-stm32mp-r2"
 BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
 BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 # BR2_TARGET_UBOOT_FORMAT_BIN is not set
-BR2_TARGET_UBOOT_FORMAT_DTB=y
 BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp135d-odyssey"
+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
+# BR2_TARGET_UBOOT_DEFAULT_ENV_FILE="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot.env"
+# BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot-enable-usb-net-boot.config"
+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/debug.config"
+BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/*"
+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="dtb-y=stm32mp135d-odyssey_dev_minimal_dt-mx.dtb DEVICE_TREE=stm32mp135d-odyssey_dev_minimal_dt-mx
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/boot.cmd"
+
 
 ##############################################
 #                  Linux                     #
@@ -88,3 +105,9 @@ BR2_LINUX_KERNEL_ZSTD=y
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/old/dts/stm32mp135d-odyssey-grove.dts"
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+
+##############################################
+#                  Packages                  #
+##############################################
+BR2_PACKAGE_HTOP=y

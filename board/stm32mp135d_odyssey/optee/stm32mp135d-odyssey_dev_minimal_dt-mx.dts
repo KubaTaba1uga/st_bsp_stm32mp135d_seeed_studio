@@ -124,6 +124,8 @@
 
 	/* USER CODE BEGIN pinctrl */
 	wakeup_pins: wakeup_pins {
+		// @todo: PMIC_INIT is absent from hardware.md, we should add it as well as schematics.
+		//        it would be nice to describe better what this pin do, as well as wakeup pins.
 		wakeup_pin_1: pins1 {
 			pinmux = <STM32_PINMUX('F', 8, GPIO)>;	// PMIC_INT
 			bias-pull-up;
@@ -144,7 +146,20 @@
 		wakeup_pin_6: pins6 {
 			pinmux = <STM32_PINMUX('C', 2, GPIO)>;	// NC
 		};
-	};	
+	};
+
+	uart4_pins_mx: uart4-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX_NSEC('A', 13, AF8)>; /* UART4_TX */
+			bias-disable;
+			drive-push-pull;
+			slew-rate = <0>;
+		};
+		pins2 {
+			pinmux = <STM32_PINMUX_NSEC('E', 5, AF8)>; /* UART4_RX */
+			bias-disable;
+		};
+	};
 	/* USER CODE END pinctrl */
 };
 
@@ -163,7 +178,7 @@
 	/*"Non Secured" peripherals*/
 	DECPROT(STM32MP1_ETZPC_SDMMC1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	/*"Secured" peripherals*/
-	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)	
+	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 
 	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
@@ -210,12 +225,6 @@
 	clock-frequency = <400000>;
 	
 	pmic: stpmic@33 {
-		/* compatible = "st,stpmic1"; */
-		/* reg = <0x33>; */
-		/* status = "okay"; */
-		/* st,wakeup-pin-number = <1>; */
-		/* st,notif-it-id = <0>; */
-
 		compatible = "st,stpmic1";
 		reg = <0x33>;
 		status = "okay";
@@ -473,7 +482,6 @@
 			/* USER CODE END rcc_st-ck_mlahbs */
 		};
 	};
-
 	/* USER CODE BEGIN rcc */
 	/* USER CODE END rcc */
 };
@@ -482,7 +490,7 @@
 &cpu0 {
 	cpu-supply = <&vddcpu>;
         operating-points-v2 = <>; // We disable OPP because of our HSI usage for bringup
-	                          // @todo: set appropriate opp
+	                          // @todo: set appropriate opp and enable HSE
 };
 
 &scmi_regu {
@@ -540,6 +548,12 @@
 
 &sdmmc1_io {
 	vddsd1-supply = <&vdd_sd>;
+};
+
+&uart4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart4_pins_mx>;
+	status = "okay";
 };
 /* USER CODE END addons */
 

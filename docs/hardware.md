@@ -53,13 +53,10 @@ input, the difference in voltage is positive and allow for current going threw t
 other way around negative voltage prevents transistor from opening, hence the diode functionality. Transistor model
 is RQ3E120ATTB which datasheet is available [here](path:./assets/RQ3E120ATTB.pdf).
 
-The output of the transistor is connected to PMIC, which further convert it into multiple power sources adequate 
-for other subsystems. 
+USB C outputs 5V, which goes as transistor input, the output of the transistor is connected to PMIC. PMIC receives 5V
+which it further convert it into multiple different voltages adequate for other subsystems on the board. 
 
 Power pipeline looks sth like this: USB C -> Switch -> PMIC -> CPU.
-
-USB C outputs 5V, which goes as transistor input, transistor outputs 5V into PMIC which convert it to multiple 
-voltages, allowing to power components with different voltage level needs.
 
 DM and DP are connected to USBH port 2.
 
@@ -86,10 +83,10 @@ Micro SD card
 
 SD Card slot has 9 wires VDD (power), VSS (ground), CLK (clock), CMD (command), DAT0 (data), DAT1, DAT2, DAT3 and CD (card detection).
 
-According to SD specification SD card itself has embedded microcontroller, so purpose of the slot is only to provide physical wiring so the MCU
+According to SD specification SD card itself has embedded microcontroller, so purpose of the slot is to provide physical wiring so the MCU
 inside an SD card can talk to SDMMC chip inside the CPU. SD card slot model is ST-TF-003A which datasheet is available [here](path:./assets/ST-TF-003A.pdf).
 
-Power pin is connected to one of PMIC outputs. The SD card slot support 4 bit SD bus mode, so we have 4 data wires between the slot and CPU.
+Power pin is connected to one of PMIC outputs. The SD card slot support 4 bit SD bus mode, so we have 4 data wires between the slot and the CPU.
 
 The SD card slot is missing from the picture because it is on the other side of the board.
 
@@ -121,24 +118,27 @@ The SD card slot is missing from the picture because it is on the other side of 
 PMIC
 -----
 
-PMIC (STPMIC1DPQR) has a lot of wires so, let's split them in two groups: power control and power supply.
+PMIC (STPMIC1DPQR) has a lot of wires so, let's split them in two groups: power control and power supply.  
 PMIC model is STPMIC1DPQR which datasheet is available [here](path:./assets/stpmic1.pdf).
 
-Power control allow us configuring board voltages on the fly, while the system is already running. PMIC has it's own non volataile
-memory, meaning the setiings are persitent across reboots. Among the wires we have IIC4_SDA (i2c SDA), IIC4_SCL (i2c clock), 
-POWER_ON (power switch), SYS_RESET (reset switch), PMIC_WAKEUP (power switch for host processor). 
+Power control allow us configuring board voltages while the system is already running. PMIC has it's own non volataile
+memory, meaning the setings are persitent across reboots. Among the wires we have IIC4_SDA (i2c SDA), IIC4_SCL (i2c clock), 
+POWER_ON (power control mode), SYS_RESET (power reset switch), PMIC_WAKEUP (power switch for host processor), WAKEUP (power 
+switch for user) which is connected to wakup pin on debug connector, you can power on the board shorting wakeup and GND,
+PF8_WAKEUP (interrupt from PMIC to CPU).
 
 ```{csv-table} PMIC pinnout
 :header: >
 :    "Func", "Ball", "Chip Pin", "Description"
 :widths: 20, 10, 25, 35
 
-"IIC4_SDA", "C6", "GPIOB pin 7", "I2C4 data line"
-"IIC4_SCL", "A9", "GPIOE pin 15", "I2C4 clock line"
-"POWER_ON", "U17", "", "Power on input"
-"SYS_RESET", "Y11", "", "System reset input"
-"PMIC_WAKEUP", "M3", "GPIOC pin 13", "PMIC wake-up signal"
-"WAKEUP", "", "", "Wake up input"
+"IIC4_SDA", "C6", "GPIOB pin 7", "I2C4 data"
+"IIC4_SCL", "A9", "GPIOE pin 15", "I2C4 clock"
+"POWER_ON", "U17", "", "Power control mode"
+"SYS_RESET", "Y11", "", "Power reset input"
+"PMIC_WAKEUP", "M3", "GPIOC pin 13", "Power ON from CPU"
+"WAKEUP", "", "", "Power ON from User, this PIN is exposed on DEBUG connector as Wakeup"
+"PF8_WKUP", "F1", "", "PMIC interrupt to CPU"
 ```
 
 ![Circuit diagram for PMIC](assets/pmic_schematics_0.png)
