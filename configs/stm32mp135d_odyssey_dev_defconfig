@@ -10,12 +10,14 @@ BR2_CCACHE=y
 BR2_TARGET_GENERIC_HOSTNAME="ebook_reader"
 BR2_PACKAGE_OVERRIDE_FILE="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/dev/local.mk"
 
+
 ##############################################
 #                  Toolchain                 #
 ##############################################
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+
 
 ##############################################
 #                  Rootfs                    #
@@ -30,6 +32,7 @@ BR2_TARGET_ROOTFS_EXT2=y
 BR2_TARGET_ROOTFS_EXT2_4=y
 BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
 BR2_TARGET_ROOTFS_EXT2_SIZE="60M"
+
 
 ##############################################
 #                  TF-A                      #
@@ -49,6 +52,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/tfa/*"
 BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
 
+
 ##############################################
 #                  Optee OS                  #
 ##############################################
@@ -62,6 +66,7 @@ BR2_TARGET_OPTEE_OS_PLATFORM="stm32mp1"
 BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
 BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/optee/*"
 BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_EMBED_DTB_SOURCE_FILE=stm32mp135d-odyssey_dev_minimal_dt-mx.dts CFG_STM32MP13=y CFG_WITH_TUI=n CFG_DRAM_SIZE=0x20000000" # Enable debug with: CFG_TEE_CORE_LOG_LEVEL=3 DEBUG=1
+
 
 ##############################################
 #                  U-boot                    #
@@ -100,3 +105,9 @@ BR2_LINUX_KERNEL_ZSTD=y
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/old/dts/stm32mp135d-odyssey-grove.dts"
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+
+##############################################
+#                  Packages                  #
+##############################################
+BR2_PACKAGE_HTOP=y
