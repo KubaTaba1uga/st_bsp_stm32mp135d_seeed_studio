@@ -36,14 +36,14 @@
 		ranges;
 
 		/* USER CODE BEGIN reserved-memory */
+		optee@dd000000{
+			reg = <0xdd000000 0x3000000>;
+			no-map;
+		};		
 		/* USER CODE END reserved-memory */
 	};
 
 	/* USER CODE BEGIN root */
-	optee@dd000000{
-		reg = <0xdd000000 0x3000000>;
-		no-map;
-	};
 
 	aliases{
 		serial0 = &uart4;
@@ -62,12 +62,44 @@
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		regulator-always-on;
-	};	
+	};
+
+	cpu0_opp_table: cpu0_opp_table {
+	    compatible = "operating-points-v2";
+
+	    opp0 {
+		opp-hz = /bits/ 64 <64000000>;
+		opp-microvolt = <1200000>;
+	    };
+	};
+	
 	/* USER CODE END root */
-
 	clocks{
-
 		/* USER CODE BEGIN clocks */
+		clk_hsi: clk-hsi {
+			clock-frequency = <64000000>;
+
+			/* USER CODE BEGIN clk_hsi */
+			/* USER CODE END clk_hsi */
+		};
+		clk_lse: clk-lse {
+			status = "disabled";
+
+			/* USER CODE BEGIN clk_lse */
+			/* USER CODE END clk_lse */
+		};
+		clk_hse: clk-hse {
+			status = "disabled";
+   
+			/* USER CODE BEGIN clk_hse */
+			/* USER CODE END clk_hse */
+		};
+		clk_i2sin: clk-i2sin {
+			status = "disabled";
+
+			/* USER CODE BEGIN clk_i2sin */
+			/* USER CODE END clk_i2sin */
+		};
 		/* USER CODE END clocks */
 	};
 
@@ -258,6 +290,13 @@
 		reg = <VOLTD_SCMI_STPMIC1_PWR_SW2>;
 		regulator-name = "v3v3_sw";
 	};
+};
+
+&cpu0 {
+        clock-frequency = <64000000>;  // in Hz
+	
+        /* operating-points = <64000 0>;	 */
+	operating-points-v2 = <&cpu0_opp_table>;
 };
 /* USER CODE END addons */
 

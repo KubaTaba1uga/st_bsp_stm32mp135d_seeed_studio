@@ -36,7 +36,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BR2_EXTERNAL_ST_PATH)/board/old/utilities/geni
 BR2_TARGET_ROOTFS_EXT2=y
 BR2_TARGET_ROOTFS_EXT2_4=y
 BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
-BR2_TARGET_ROOTFS_EXT2_SIZE="60M"
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 
 
 ##############################################
@@ -111,6 +111,7 @@ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odys
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
 BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 BR2_LINUX_KERNEL_ZSTD=y
+
 
 ##############################################
 #                  Packages                  #
