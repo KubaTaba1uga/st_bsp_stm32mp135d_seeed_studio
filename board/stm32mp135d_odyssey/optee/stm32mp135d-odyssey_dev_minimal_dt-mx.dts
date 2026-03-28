@@ -80,7 +80,6 @@
 	clocks {
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
-
 		clk_hsi: clk-hsi {
 			clock-frequency = <64000000>;
 
