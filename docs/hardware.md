@@ -173,3 +173,24 @@ Power supply are pins used for providing appropriate voltages for our board. Eac
 ```
 
 ![Circuit diagram for PMIC](assets/pmic_schematics_6.png)
+
+
+HSE 24Mhz Crystal
+--------------------
+
+By default CPU has 3 internal clocks HSI (high speed internal) 64Mhz, CSI (low power internal) 4Mhz and LSI (low speed internal) 32kHz and support additionally 2 external HSE (high speed external) clocks.
+
+To route clock to CPU, it need to go threw PLL1 (Phase-Locked Loops) circuit, which allow increasing frequency before it arrive at the processor. We could route HSI threw PLL1 to CPU but because of relatively lower accuracy HSE is much better suited for the job.
+
+We can find on the schematics reference to 24Mhz crystal connected to GPIOH pin 0 and GPIOH pin 1. HSE provide only 24Mhz but because of much better accuracy than HSI, we can clock HSE up via PLL1 effectively up to ~1Ghz. Additionally we also clock RAM via HSE, to achieve maximum DDR3 frequency (533Mhz). 24Mhz clock is marked on the board's picture by number 20.
+
+```{csv-table} HSE 24Mhz pinnout
+:header: >
+:    "Func", "Ball", "Chip Pin", "Description"
+:widths: 20, 10, 20, 30
+
+"OSC_IN", "T3", "GPIOH pin 0", "Oscilator in"
+"OSC_OUT", "U2", "GPIOH pin 1", "Oscilator out"
+```
+
+![Circuit diagram for HSE 24Mhz](assets/hse_24mhz_schematics_0.png)

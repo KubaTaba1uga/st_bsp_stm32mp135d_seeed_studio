@@ -58,6 +58,37 @@
 		regulator-always-on;
 	};
 	/* USER CODE END root */
+
+	/* clocks { */
+	/* 	/\* USER CODE BEGIN clocks *\/ */
+	/* 	/\* USER CODE END clocks *\/ */
+
+	/* 	clk_hsi: clk-hsi { */
+	/* 		clock-frequency = <64000000>; */
+
+	/* 		/\* USER CODE BEGIN clk_hsi *\/ */
+	/* 		/\* USER CODE END clk_hsi *\/ */
+	/* 	}; */
+	/* 	clk_lse: clk-lse { */
+	/* 		status = "disabled"; */
+
+	/* 		/\* USER CODE BEGIN clk_lse *\/ */
+	/* 		/\* USER CODE END clk_lse *\/ */
+	/* 	}; */
+	/* 	clk_hse: clk-hse { */
+	/* 		clock-frequency = <24000000>; */
+	/* 		st,css; */
+
+	/* 		/\* USER CODE BEGIN clk_hse *\/ */
+	/* 		/\* USER CODE END clk_hse *\/ */
+	/* 	}; */
+	/* 	clk_i2sin: clk-i2sin { */
+	/* 		status = "disabled"; */
+
+	/* 		/\* USER CODE BEGIN clk_i2sin *\/ */
+	/* 		/\* USER CODE END clk_i2sin *\/ */
+	/* 	}; */
+	/* };	 */
 }; /*root*/
 
 &pinctrl {
@@ -227,35 +258,57 @@
 &rcc {
 	status = "okay";
 	st,clksrc = <
-		CLK_MPU_HSI
-		CLK_AXI_HSI
-		CLK_MLAHBS_HSI
+		CLK_MPU_PLL1P
+		CLK_AXI_PLL2P
+		CLK_MLAHBS_PLL3
 		CLK_CKPER_DISABLED
+		CLK_SDMMC1_PLL3R
 		CLK_STGEN_HSI
-		CLK_I2C4_HSI
+		CLK_I2C4_PCLK6
 		CLK_UART4_HSI
-		CLK_SDMMC1_HSI		
 	>;
-	
 	st,clkdiv = <
 		DIV(DIV_MPU, 1)
 		DIV(DIV_AXI, 0)
 		DIV(DIV_MLAHB, 0)
-		DIV(DIV_APB1, 0)
-		DIV(DIV_APB2, 0)
-		DIV(DIV_APB3, 0)
-		DIV(DIV_APB4, 0)
-		DIV(DIV_APB5, 0)
-		DIV(DIV_APB6, 0)
+		DIV(DIV_APB1, 1)
+		DIV(DIV_APB2, 1)
+		DIV(DIV_APB3, 1)
+		DIV(DIV_APB4, 1)
+		DIV(DIV_APB5, 2)
+		DIV(DIV_APB6, 1)
 	>;
-	
 	st,pll_vco {
-		pll2_vco_1056Mhz: pll2-vco-1056Mhz {
-			src = < CLK_PLL12_HSI >;
-			divmn = < 3 32 >;
+		pll1_vco_1992Mhz: pll1-vco-1992Mhz {
+			src = < CLK_PLL12_HSE >;
+			divmn = < 1 82 >;
+		};
+		pll2_vco_1066Mhz: pll2-vco-1066Mhz {
+			src = < CLK_PLL12_HSE >;
+			divmn = < 2 65 >;
+			frac = < 0x1400 >;
+		};
+		pll3_vco_400Mhz: pll3-vco-400Mhz {
+			src = < CLK_PLL3_HSE >;
+			divmn = < 1 32 >;
+			frac = < 0xaab >;
 		};
 		/* USER CODE BEGIN rcc_st-pll_vco */
 		/* USER CODE END rcc_st-pll_vco */
+	};
+
+	pll1:st,pll@0 {
+		compatible = "st,stm32mp1-pll";
+		reg = <0>;
+
+		st,pll = < &pll1_cfg1 >;
+
+		pll1_cfg1: pll1_cfg1 {
+			st,pll_vco = < &pll1_vco_1992Mhz >;
+			st,pll_div_pqr = < 0 1 1 >;
+		};
+		/* USER CODE BEGIN pll1 */
+		/* USER CODE END pll1 */
 	};
 
 	pll2:st,pll@1 {
@@ -265,12 +318,27 @@
 		st,pll = < &pll2_cfg1 >;
 
 		pll2_cfg1: pll2_cfg1 {
-			st,pll_vco = < &pll2_vco_1056Mhz >;
+			st,pll_vco = < &pll2_vco_1066Mhz >;
 			st,pll_div_pqr = < 1 1 0 >;
 		};
 		/* USER CODE BEGIN pll2 */
 		/* USER CODE END pll2 */
 	};
+
+	pll3:st,pll@2 {
+		compatible = "st,stm32mp1-pll";
+		reg = <2>;
+
+		st,pll = < &pll3_cfg1 >;
+
+		pll3_cfg1: pll3_cfg1 {
+			st,pll_vco = < &pll3_vco_400Mhz >;
+			st,pll_div_pqr = < 1 1 1 >;
+		};
+		/* USER CODE BEGIN pll3 */
+		/* USER CODE END pll3 */
+	};
+
 };
 
 &pwr_regulators {
