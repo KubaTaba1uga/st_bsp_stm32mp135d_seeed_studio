@@ -78,7 +78,7 @@
 
 	cpu0_opp_table_1: cpu0-opp-table-1 {
 		compatible = "operating-points-v2";
-
+		
 		opp-996000000 {
 			opp-hz = /bits/ 64 <996000000>;
 			opp-microvolt = <1350000>;
@@ -86,7 +86,6 @@
 			st,opp-default;
 		};
 	};
-
 	/* USER CODE END root */
 	clocks {
 		/* USER CODE BEGIN clocks */

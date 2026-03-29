@@ -44,7 +44,6 @@
 	};
 
 	/* USER CODE BEGIN root */
-
 	aliases{
 		serial0 = &uart4;
 	};
@@ -63,16 +62,6 @@
 		regulator-max-microvolt = <3300000>;
 		regulator-always-on;
 	};
-
-	/* cpu0_opp_table: cpu0_opp_table { */
-	/*     compatible = "operating-points-v2"; */
-
-	/*     opp0 { */
-	/* 	opp-hz = /bits/ 64 <64000000>; */
-	/* 	opp-microvolt = <1200000>; */
-	/*     }; */
-	/* }; */
-	
 	/* USER CODE END root */
 
 	clocks{
@@ -228,6 +217,10 @@
 };
 
 /* USER CODE BEGIN addons */
+&cpu0 {
+        clock-frequency = <996000000>;  // in Hz
+};
+
 &scmi_regu {
 	scmi_vddcpu:regulator@6{
 		reg = <VOLTD_SCMI_STPMIC1_BUCK1>;
@@ -269,12 +262,5 @@
 		regulator-name = "v3v3_sw";
 	};
 };
-
-/* &cpu0 { */
-        /* clock-frequency = <64000000>;  // in Hz */
-	
-        /* operating-points = <64000 0>;	 */
-	/* operating-points-v2 = <&cpu0_opp_table>; */
-/* }; */
 /* USER CODE END addons */
 
