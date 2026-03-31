@@ -1,12 +1,12 @@
 {
   "otp": {
-    "addr": "0x5C005000",
+    "addr": "0x5C005200",
     "bits": [
       {
         "name": "Device Part Number",
-        "offset": "0x204",
+        "offset": "0x04",
         "start": 0,
-          "end": 12,
+        "end": 12,
         "options": {
           "0x6C9": "STM32MP131A",
           "0x6C8": "STM32MP131C",
@@ -20,6 +20,138 @@
           "0x000": "STM32MP135C",
           "0x801": "STM32MP135D",
           "0x800": "STM32MP135F"
+        }
+      },
+      {
+        "name": "qspi_not_default_af",
+        "offset": "0x0C",
+        "start": 0,
+        "end": 1,
+        "options": {
+          "0x0": "QSPI uses default AFmux",
+          "0x1": "QSPI uses OTP AFmux"
+        }
+      },
+      {
+        "name": "emmc_if_id",
+        "offset": "0x0C",
+        "start": 1,
+        "end": 3,
+        "options": {
+          "0x0": "SDMMC2 with default AFMux",
+          "0x1": "SDMMC1",
+          "0x2": "SDMMC2 (OTP AFMux)"
+        }
+      },
+      {
+        "name": "sd_if_id",
+        "offset": "0x0C",
+        "start": 3,
+        "end": 5,
+        "options": {
+          "0x0": "SDMMC1 with default AFMux",
+          "0x1": "SDMMC1 (OTP AFMux)",
+          "0x2": "SDMMC2"
+        }
+      },
+      {
+        "name": "no_cpu_pll",
+        "offset": "0x0C",
+        "start": 5,
+        "end": 6,
+        "options": {
+          "0x0": "CPU/AXI PLL enabled",
+          "0x1": "CPU/AXI PLL disabled"
+        }
+      },
+      {
+        "name": "no_usb_dp_pullup",
+        "offset": "0x0C",
+        "start": 6,
+        "end": 7,
+        "options": {
+          "0x0": "USB DP pull-up set",
+          "0x1": "USB DP pull-up not set"
+        }
+      },
+      {
+        "name": "uart_instances_disabled",
+        "offset": "0x0C",
+        "start": 7,
+        "end": 15,
+        "options": {
+          "0x04": "Disable USART3",
+          "0x08": "Disable UART4",
+          "0x10": "Disable UART5",
+          "0x20": "Disable UART6",
+          "0x40": "Disable UART7",
+          "0x80": "Disable USART8",
+          "0xFF": "All UART enabled"
+        }
+      },
+      {
+        "name": "no_data_cache",
+        "offset": "0x0C",
+        "start": 15,
+        "end": 16,
+        "options": {
+          "0x0": "Data cache enabled",
+          "0x1": "Data cache disabled"
+        }
+      },
+      {
+        "name": "boot_source_disable",
+        "offset": "0x0C",
+        "start": 16,
+        "end": 23,
+        "options": {
+          "0x01": "Disable FMC",
+          "0x02": "Disable QSPI NOR",
+          "0x04": "Disable eMMC",
+          "0x08": "Disable SD",
+          "0x10": "Disable UART",
+          "0x20": "Disable USB",
+          "0x40": "Disable QSPI NAND"
+        }
+      },
+      {
+        "name": "secondary_boot_source",
+        "offset": "0x0C",
+        "start": 24,
+        "end": 27,
+        "options": {
+          "0x0": "None",
+          "0x1": "FMC NAND",
+          "0x2": "QSPI NOR",
+          "0x3": "eMMC",
+          "0x4": "SD",
+          "0x5": "QSPI NAND"
+        }
+      },
+      {
+        "name": "primary_boot_source",
+        "offset": "0x0C",
+        "start": 27,
+        "end": 30,
+        "options": {
+          "0x0": "None",
+          "0x1": "FMC NAND",
+          "0x2": "QSPI NOR",
+          "0x3": "eMMC",
+          "0x4": "SD",
+          "0x5": "QSPI NAND"
+        }
+      },
+      {
+        "name": "hse_value",
+        "offset": "0x0C",
+        "start": 30,
+        "end": 32,
+        "options": {
+          "0x0": "Auto",
+          "0x1": "24 MHz",
+          "0x2": "25 MHz",
+          "0x3": "26 MHz"
         }
       }
     ]
