@@ -115,3 +115,7 @@ BR2_LINUX_KERNEL_ZSTD=y
 #                  Packages                  #
 ##############################################
 BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+BR2_PACKAGE_PYTHON3_UNICODEDATA=y
+BR2_PACKAGE_UEMACS=y

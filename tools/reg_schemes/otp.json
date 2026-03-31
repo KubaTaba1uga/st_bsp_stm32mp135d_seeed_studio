@@ -1,0 +1,27 @@
+{
+  "otp": {
+    "addr": "0x5C005000",
+    "bits": [
+      {
+        "name": "Device Part Number",
+        "offset": "0x204",
+        "start": 0,
+          "end": 12,
+        "options": {
+          "0x6C9": "STM32MP131A",
+          "0x6C8": "STM32MP131C",
+          "0xEC9": "STM32MP131D",
+          "0xEC8": "STM32MP131F",
+          "0x0C1": "STM32MP133A",
+          "0x0C0": "STM32MP133C",
+          "0x8C1": "STM32MP133D",
+          "0x8C0": "STM32MP133F",
+          "0x001": "STM32MP135A",
+          "0x000": "STM32MP135C",
+          "0x801": "STM32MP135D",
+          "0x800": "STM32MP135F"
+        }
+      }
+    ]
+  }
+}

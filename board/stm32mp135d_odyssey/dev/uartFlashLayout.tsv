@@ -1,0 +1,3 @@
+ #Opt	id	Name	Type		IP		Offset		Binary
+ -	0x01	fsbl		Binary		none	0x00000000	tf-a-stm32mp135d-odyssey_dev_minimal_dt-mx.stm32
+ -	0x03	fip		FIP		none	0x00000000	fip.bin
