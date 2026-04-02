@@ -288,5 +288,47 @@
 		regulator-name = "v3v3_sw";
 	};
 };
+
+&usbotg_hs {
+	status = "okay";
+
+	/* USER CODE BEGIN usbotg_hs */
+	phys = <&usbphyc_port1 0>;
+	phy-names = "usb2-phy";
+	dr_mode = "peripheral";
+
+	/* port{ */
+	/*      usbotg_hs_ep:endpoint{ */
+	/* 	     remote-endpoint = <&con_usb_c_g0_ep>; */
+	/*      }; */
+	/* };	 */
+	/* USER CODE END usbotg_hs */
+};
+
+&usbphyc {
+	status = "okay";
+
+	/* USER CODE BEGIN usbphyc */
+	/* USER CODE END usbphyc */
+};
+
+
+&usbphyc_port1 {
+	status = "okay";
+
+	/* USER CODE BEGIN usbphyc_port1 */
+	phy-supply = <&scmi_vdd_usb>;
+	st,current-boost-microamp = <1000>;
+	st,decrease-hs-slew-rate;
+	st,tune-hs-dc-level = <2>;
+	st,enable-hs-rftime-reduction;
+	st,trim-hs-current = <11>;
+	st,trim-hs-impedance = <2>;
+	st,tune-squelch-level = <1>;
+	st,enable-hs-rx-gain-eq;
+	st,no-hs-ftime-ctrl;
+	st,no-lsfs-sc;	
+	/* USER CODE END usbphyc_port1 */
+};
 /* USER CODE END addons */
 

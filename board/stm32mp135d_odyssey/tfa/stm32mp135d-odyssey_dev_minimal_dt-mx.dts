@@ -58,37 +58,6 @@
 		regulator-always-on;
 	};
 	/* USER CODE END root */
-
-	/* clocks { */
-	/* 	/\* USER CODE BEGIN clocks *\/ */
-	/* 	/\* USER CODE END clocks *\/ */
-
-	/* 	clk_hsi: clk-hsi { */
-	/* 		clock-frequency = <64000000>; */
-
-	/* 		/\* USER CODE BEGIN clk_hsi *\/ */
-	/* 		/\* USER CODE END clk_hsi *\/ */
-	/* 	}; */
-	/* 	clk_lse: clk-lse { */
-	/* 		status = "disabled"; */
-
-	/* 		/\* USER CODE BEGIN clk_lse *\/ */
-	/* 		/\* USER CODE END clk_lse *\/ */
-	/* 	}; */
-	/* 	clk_hse: clk-hse { */
-	/* 		clock-frequency = <24000000>; */
-	/* 		st,css; */
-
-	/* 		/\* USER CODE BEGIN clk_hse *\/ */
-	/* 		/\* USER CODE END clk_hse *\/ */
-	/* 	}; */
-	/* 	clk_i2sin: clk-i2sin { */
-	/* 		status = "disabled"; */
-
-	/* 		/\* USER CODE BEGIN clk_i2sin *\/ */
-	/* 		/\* USER CODE END clk_i2sin *\/ */
-	/* 	}; */
-	/* };	 */
 }; /*root*/
 
 &pinctrl {
@@ -144,9 +113,11 @@
 	board_id: board_id@f0 {
 		reg = <0xf0 0x4>;
 		st,non-secure-otp;
-	};	
+	};
 	/* USER CODE END bsec */
 };
+
+
 
 &i2c4 {
 	pinctrl-names = "default";
@@ -265,7 +236,8 @@
 		CLK_SDMMC1_PLL3R
 		CLK_STGEN_HSI
 		CLK_I2C4_PCLK6
-		CLK_UART4_HSI
+         	CLK_UART4_HSI
+		CLK_USBO_USBPHY	
 	>;
 	st,clkdiv = <
 		DIV(DIV_MPU, 1)
@@ -389,4 +361,25 @@
 	vdd-supply = <&vdd_ddr>;
 	vref-supply = <&vref_ddr>;
 };
+
+/* &usbotg_hs { */
+/* 	status = "okay"; */
+
+/* 	/\* USER CODE BEGIN usbotg_hs *\/ */
+/* 	/\* USER CODE END usbotg_hs *\/ */
+/* }; */
+
+/* &usbphyc { */
+/* 	status = "okay"; */
+
+/* 	/\* USER CODE BEGIN usbphyc *\/ */
+/* 	/\* USER CODE END usbphyc *\/ */
+/* }; */
+
+/* &usbphyc_port1 { */
+/* 	status = "okay"; */
+
+/* 	/\* USER CODE BEGIN usbphyc_port1 *\/ */
+/* 	/\* USER CODE END usbphyc_port1 *\/ */
+/* }; */
 /* USER CODE END addons */
