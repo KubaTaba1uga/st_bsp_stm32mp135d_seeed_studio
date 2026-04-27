@@ -22,8 +22,8 @@
 /* USER CODE END includes */
 
 / {
-	model = "STMicroelectronics custom STM32CubeMX board";
-	compatible = "st,stm32mp135d-odyssey_dev_minimal_dt-mx", "st,stm32mp135";
+	model = "Ebook reader";
+	compatible = "st,stm32mp135d-mx", "st,stm32mp135";
 
 	memory@c0000000 {
 		device_type = "memory";
@@ -58,37 +58,6 @@
 		regulator-always-on;
 	};
 	/* USER CODE END root */
-
-	/* clocks { */
-	/* 	/\* USER CODE BEGIN clocks *\/ */
-	/* 	/\* USER CODE END clocks *\/ */
-
-	/* 	clk_hsi: clk-hsi { */
-	/* 		clock-frequency = <64000000>; */
-
-	/* 		/\* USER CODE BEGIN clk_hsi *\/ */
-	/* 		/\* USER CODE END clk_hsi *\/ */
-	/* 	}; */
-	/* 	clk_lse: clk-lse { */
-	/* 		status = "disabled"; */
-
-	/* 		/\* USER CODE BEGIN clk_lse *\/ */
-	/* 		/\* USER CODE END clk_lse *\/ */
-	/* 	}; */
-	/* 	clk_hse: clk-hse { */
-	/* 		clock-frequency = <24000000>; */
-	/* 		st,css; */
-
-	/* 		/\* USER CODE BEGIN clk_hse *\/ */
-	/* 		/\* USER CODE END clk_hse *\/ */
-	/* 	}; */
-	/* 	clk_i2sin: clk-i2sin { */
-	/* 		status = "disabled"; */
-
-	/* 		/\* USER CODE BEGIN clk_i2sin *\/ */
-	/* 		/\* USER CODE END clk_i2sin *\/ */
-	/* 	}; */
-	/* };	 */
 }; /*root*/
 
 &pinctrl {
@@ -265,6 +234,7 @@
 		CLK_SDMMC1_PLL3R
 		CLK_STGEN_HSI
 		CLK_I2C4_PCLK6
+		CLK_USBO_USBPHY
 		CLK_UART4_HSI
 	>;
 	st,clkdiv = <
@@ -280,13 +250,14 @@
 	>;
 	st,pll_vco {
 		pll1_vco_1992Mhz: pll1-vco-1992Mhz {
-			src = < CLK_PLL12_HSE >;
-			divmn = < 1 82 >;
+			src = < CLK_PLL12_HSI >;
+			divmn = < 3 61 >;
+			frac = < 0x800 >;
 		};
 		pll2_vco_1066Mhz: pll2-vco-1066Mhz {
-			src = < CLK_PLL12_HSE >;
-			divmn = < 2 65 >;
-			frac = < 0x1400 >;
+			src = < CLK_PLL12_HSI >;
+			divmn = < 3 32 >;
+			frac = < 0xa00 >;
 		};
 		pll3_vco_400Mhz: pll3-vco-400Mhz {
 			src = < CLK_PLL3_HSE >;

@@ -25,8 +25,8 @@
 /* USER CODE END includes */
 
 / {
-	model = "STMicroelectronics custom STM32CubeMX board - openstlinux-6.6-yocto-scarthgap-mpu-v26.02.18";
-	compatible = "st,stm32mp135d-odyssey_dev_minimal_dt-mx", "st,stm32mp135";
+	model = "Ebook reader";
+	compatible = "st,stm32mp135d-mx", "st,stm32mp135";
 
 	memory@c0000000 {
 		device_type = "memory";
@@ -42,6 +42,10 @@
 		ranges;
 
 		/* USER CODE BEGIN reserved-memory */
+		optee@dd000000 {
+			reg = <0xdd000000 0x3000000>;
+			no-map;
+		};		
 		/* USER CODE END reserved-memory */
 	};
 
@@ -187,10 +191,12 @@
 	DECPROT(STM32MP1_ETZPC_DDRCTRLPHY_ID, DECPROT_NS_R_S_W, DECPROT_LOCK)
 	/*"Non Secured" peripherals*/
 	DECPROT(STM32MP1_ETZPC_SDMMC1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-	/*"Secured" peripherals*/
+	DECPROT(STM32MP1_ETZPC_OTG_ID, DECPROT_NS_RW, DECPROT_UNLOCK)	
+	DECPROT(STM32MP1_ETZPC_USBPHYCTRL_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_S_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_UNLOCK)
-
+        /*"Secured" peripherals*/
+	
 	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
 		  STM32MP1_ETZPC_SRAMx_ID  STM32MP1_ETZPC_BKPSRAM_ID*/
 
@@ -415,8 +421,10 @@
 		CLK_MCO2_DISABLED
 		CLK_CKPER_DISABLED
 		CLK_SDMMC1_PLL3R
-		CLK_STGEN_HSI
+           	CLK_STGEN_HSI
+		CLK_USBPHY_HSE	
 		CLK_I2C4_PCLK6
+		CLK_USBO_USBPHY
 		CLK_UART4_HSI
 	>;
 	st,clkdiv = <
@@ -435,13 +443,14 @@
 	>;
 	st,pll_vco {
 		pll1_vco_1992Mhz: pll1-vco-1992Mhz {
-			src = < CLK_PLL12_HSE >;
-			divmn = < 1 82 >;
+			src = < CLK_PLL12_HSI >;
+			divmn = < 3 61 >;
+			frac = < 0x800 >;
 		};
 		pll2_vco_1066Mhz: pll2-vco-1066Mhz {
-			src = < CLK_PLL12_HSE >;
-			divmn = < 2 65 >;
-			frac = < 0x1400 >;
+			src = < CLK_PLL12_HSI >;
+			divmn = < 3 32 >;
+			frac = < 0xa00 >;
 		};
 		pll3_vco_400Mhz: pll3-vco-400Mhz {
 			src = < CLK_PLL3_HSE >;
