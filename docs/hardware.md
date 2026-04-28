@@ -15,9 +15,6 @@ is available [here](path:./assets/SY6280.pdf).
 
 DM and DP lines are connected to USBH port 1.
 
-Theoretically our CPU exposes OTG roles cabability on port 1, but in practice OTG ID pin
-is always 0 because of hardwired pull-down resistor. 
-
 ```{csv-table} USB A pinnout
 :header: >
 :    "Func", "Ball", "Chip Pin"
@@ -37,7 +34,7 @@ USB C
 ------
 
 USB C connector has 10 wires  VBUSx2 (power), DMx2 (data), DPx2 (data), CCx2 (channel control) and GNDx2 (ground). 
-Standard USB C has more wires but the USB controller in the CPU uses USB 2.0 which make use of only 10 of them.
+Standard USB C has more wires but the USB controller in the CPU uses USB 2.0 which make use of only 5 of them.
 
 From CC pins we can see that when we plug the USB C cable in it will make use of only one CC pin and this pin will
 be bring down. On the diagram you can see both CC pins bring low so one could argue that host will actually see two 
@@ -58,7 +55,8 @@ which it further convert it into multiple different voltages adequate for other 
 
 Power pipeline looks sth like this: USB C -> Switch -> PMIC -> CPU.
 
-DM and DP are connected to USBH port 2.
+DM and DP are connected to USBH port 2 which exposes OTG roles cabability, but in practice OTG ID pin
+is always 0 because of hardwired pull-down resistor. 
 
 ```{csv-table} USB C pinnout
 :header: >
