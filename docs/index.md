@@ -25,6 +25,7 @@ so if you find something missing, feel free to contribute. Anyhow, here are the 
 :maxdepth: 2
 
 hardware
+development
 ```
 
 
