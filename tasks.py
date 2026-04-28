@@ -72,15 +72,20 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
         c.run("mkdir -p third_party")
         with c.cd("third_party"):
             for repo, rdata in repos.items():
-                c.run(f"git clone {rdata['url']} {repo} || true")
+                if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
+                    continue
+                c.run(f"git clone {rdata['url']} {repo}")
                 with c.cd(repo):
                     c.run(f"git checkout {rdata['tag']}")
+                    patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}/{rdata['tag']}"
+                    if os.path.exists(patches_dir):
+                        c.run(f"find {patches_dir} -type f -exec git apply {{}} \\;")
 
     if config:
         configure(c, config)
 
     with c.cd("build/buildroot"):
-        c.run("make BR2_DL_DIR=../../build/third_party")
+        c.run("make")
 
     with c.cd("build/buildroot/build/linux-custom"):
         c.run(

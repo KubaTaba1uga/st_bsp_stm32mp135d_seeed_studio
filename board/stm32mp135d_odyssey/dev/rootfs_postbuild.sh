@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# copy uboot init script into the target image
-mkdir ${BINARIES_DIR}/boot
+set -xeu
 
-cp "${BINARIES_DIR}/boot.scr" \
-   "${TARGET_DIR}/boot/boot.scr"
+mkdir -p ${BINARIES_DIR}/boot
+
+cp ${BINARIES_DIR}/zImage ${BINARIES_DIR}/boot/
+cp ${BINARIES_DIR}/stm32mp135d-odyssey-mx.dtb ${BINARIES_DIR}/boot/
+
+rm -f ${BINARIES_DIR}/boot.ext2
+mke2fs -d ${BINARIES_DIR}/boot ${BINARIES_DIR}/boot.ext2 16M
