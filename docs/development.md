@@ -15,4 +15,9 @@ To use DFU we need first to adjust boot pins, to make 101 postion. You should pu
 python boards/stm32mp135d_odyssey/debug/flash.py
 ```
 
-Bootchain detects changes in the boot configuration and acts accordingly without any need to update the software. For more info about how we do it look into `STM32MP_USB_PROGRAMMER` config variable in TF-a, and also bootcmd variable in `board/stm32mp135d/uboot.env` file.
+Bootchain detects changes in the boot configuration and acts accordingly without any need to update the software. For more info about how we do it look into `STM32MP_USB_PROGRAMMER` config variable in TF-a, and also `bootcmd` variable in `board/stm32mp135d/uboot.env` file.
+
+To speed up DFU transfer we have seperate boot partition. Inside the boot partition is only linux and linux device tree file so try keep it that way, bigger boot partition means more waiting during each DFU download.
+
+```{warning}
+Rom bootloader, TF-A and Uboot download their software over USB and put it directly to RAM, linux however is booted diferently. U-boot download linux over USB and flash it directly to boot partition on SD card no metter whether we use DFU or normal boot. Which means that every time you need updated firmware away from your PC (and DFU) you still need to eject a card and flash with `dd`.
