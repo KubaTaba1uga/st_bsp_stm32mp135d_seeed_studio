@@ -4,7 +4,7 @@ import sys
 
 
 def main():
-    images = ["build/tf-a-stm32mp135d-odyssey-mx.stm32", "build/fip.bin", "build/boot.ext2"]
+    images = ["build/buildroot/images/tf-a-stm32mp135d-odyssey-mx.stm32", "build/buildroot/images/fip.bin", "build/buildroot/images/boot.ext2"]
     for image in images:
         wait_for_dfu()
         cmd = f"dfu-util -a 0 -R -D {image}"

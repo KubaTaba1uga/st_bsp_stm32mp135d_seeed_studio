@@ -87,11 +87,10 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 # BR2_TARGET_UBOOT_FORMAT_BIN is not set
 BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
-BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="" # Enable debug: $(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/debug.config
+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/debug.config"
 BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/*"
 BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="dtb-y=stm32mp135d-odyssey-mx.dtb DEVICE_TREE=stm32mp135d-odyssey-mx"
-BR2_TARGET_UBOOT_DEFAULT_ENV_FILE="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/uboot.env"
-
+BR2_TARGET_UBOOT_RUN_POST_RSYNC_HOOK_SCRIPT="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/uboot/uboot-post-rsync.sh"
 
 ##############################################
 #                  Linux                     #
