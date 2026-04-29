@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from invoke import task
 
@@ -174,6 +175,71 @@ def deploy_sdcard(c, dev="sda"):
 
     _pr_info(f"Deploy to sdcard completed")
 
+@task
+def gdb(c, phase="tf-a", runetime_attach=False):
+    """
+    Phase selects which firmware will be used for debugging.
+    Available `phase` values are:
+       - tf-a
+       - optee-os
+       - u-boot
+       - linux
+
+    Runetime attach decides whether to force reset before
+    attaching debugger or attach it to CPU as it is.
+    Setting `runetime_attach` to True means we won't do reset.
+    """
+    stage_phase_map = {
+        "tf-a": 1,
+        "optee-os": 2,
+        "u-boot": 3,
+        "linux": 4,
+    }
+    _pr_info(f"Running gdb...")
+    debug_phase = stage_phase_map.get(phase)
+    if not debug_phase:
+        raise ValueError(f"Wrong {phase=}")
+
+    debug_mode = 0
+    if runetime_attach:
+        debug_mode = 1
+
+    tools_path = os.path.join(ROOT_PATH, "tools", "gdb")        
+    with open(os.path.join(tools_path, "init.gdb"), "r") as src:
+        src_txt = src.read()
+        
+    src_txt = src_txt.replace("set $debug_phase = 1", f"set $debug_phase = {debug_phase}", count=1)
+    src_txt = src_txt.replace("set $debug_mode = 0", f"set $debug_mode = {debug_mode}", count=1)            
+
+    with tempfile.NamedTemporaryFile(
+            "w", prefix="init", suffix=".gdb", delete_on_close=False
+    ) as dst:
+        dst.write(src_txt)
+        dst.close()  
+                
+        with c.cd(tools_path):
+            c.run(f"gdb-multiarch -x {str(dst.name)}", pty=True)
+
+
+@task
+def openocd(c, command: str | None = None):
+    all_commands = {
+        'reboot': ["init", "reset run", "shutdown"]
+    }
+    
+    cmd = "openocd -f board/stm32mp13x_dk.cfg"
+    commands = []
+    
+    if command:
+        commands = all_commands.get(command)
+
+    if commands:
+        cmd += " " + " ".join(f"-c '{command}'" for command in commands)
+        
+    c.run(cmd, pty=True)
+    
+    
+    
     
 ###############################################
 #                Private API                  #
