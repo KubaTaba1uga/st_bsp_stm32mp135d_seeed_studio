@@ -37,7 +37,6 @@ BR2_TARGET_ROOTFS_EXT2=y
 BR2_TARGET_ROOTFS_EXT2_2=y
 BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
 BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/busybox/enable_lsblk.config"
 
 
 ##############################################
@@ -112,6 +111,8 @@ BR2_LINUX_KERNEL_ZSTD=y
 ##############################################
 #                  Packages                  #
 ##############################################
+BR2_PACKAGE_HOST_STM32WRAPPER4DBG=y
+
 BR2_PACKAGE_HTOP=y
 BR2_PACKAGE_PYTHON3=y
 BR2_PACKAGE_PYTHON3_PYC_ONLY=y
