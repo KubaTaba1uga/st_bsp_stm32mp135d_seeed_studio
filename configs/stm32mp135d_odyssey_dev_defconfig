@@ -70,7 +70,7 @@ BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=y
 BR2_TARGET_OPTEE_OS_PLATFORM="stm32mp1"
 BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
 BR2_TARGET_OPTEE_OS_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/optee/stm32mp13*dt*"
-BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_EMBED_DTB_SOURCE_FILE=stm32mp135d-odyssey-mx.dts CFG_STM32MP13=y CFG_WITH_TUI=n CFG_DRAM_SIZE=0x20000000 CFG_DT=y CFG_EMBED_DTB=y" # Enable debug: CFG_TEE_CORE_LOG_LEVEL=3 DEBUG=1
+BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_EMBED_DTB_SOURCE_FILE=stm32mp135d-odyssey-mx.dts CFG_STM32MP13=y CFG_WITH_TUI=n CFG_DRAM_SIZE=0x20000000 CFG_DT=y CFG_EMBED_DTB=y DEBUG=1" # Enable debug: CFG_TEE_CORE_LOG_LEVEL=3 DEBUG=1
 
 
 ##############################################
@@ -99,7 +99,7 @@ BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/linux.git"
 BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v6.6-stm32mp-r2"
 BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/fragment-01-multiv7_cleanup.config $(LINUX_DIR)/arch/arm/configs/fragment-02-multiv7_addons.config $(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/linux/default.config"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/fragment-01-multiv7_cleanup.config $(LINUX_DIR)/arch/arm/configs/fragment-02-multiv7_addons.config $(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/linux/default.config $(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/linux/debug.config"
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp135d-odyssey-mx"
 BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/board/stm32mp135d_odyssey/linux/st"
