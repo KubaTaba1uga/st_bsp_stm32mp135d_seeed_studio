@@ -26,7 +26,7 @@ In case you need tf-a/optee/u-boot to be saved on the SD card remember to eject 
 ```
 
 ```{warning}
-DFU is only enabled in debug builds.
+DFU is only enabled in development builds.
 ```
 
 OpenOCD and GDB

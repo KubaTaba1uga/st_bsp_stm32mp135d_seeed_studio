@@ -2,4 +2,4 @@ config BR2_TARGET_UBOOT_RUN_POST_RSYNC_HOOK_SCRIPT
 	string "Run U-boot post-rsync hook"
 	default ""
 
-source "$BR2_EXTERNAL_ST_PATH/package/stm32wrapper4dbg/Config.in.host"
+source "$BR2_EXTERNAL_SEEED_STUDIO_PATH/package/stm32wrapper4dbg/Config.in.host"
