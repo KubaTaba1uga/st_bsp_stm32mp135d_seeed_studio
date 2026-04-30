@@ -3,7 +3,7 @@ name: Doxygen Pages
 
 on:
   push:
-    branches: [host_docs_on_github]
+    branches: [master]
 
 permissions:
   contents: read
