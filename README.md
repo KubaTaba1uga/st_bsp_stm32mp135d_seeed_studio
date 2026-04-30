@@ -10,6 +10,8 @@ The image is build in `build/buildroot/images/sdcard.img`, to flash it onto sdca
 ❯ sudo dd bs=4M conv=fsync if=build/buildroot/images/sdcard.img of=/dev/sda status=progress
 ```
 
+More info about the BSP can be found in docs [here](https://kubataba1uga.github.io/st_bsp_stm32mp135d_seeed_studio/index.html).
+
 ### Supported peripherals
 
 Currently supported peripherals are:
