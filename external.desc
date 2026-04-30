@@ -1,2 +1,2 @@
-name: ST
-desc: External buildroot tree for ST boards
+name: SEEED_STUDIO
+desc: External buildroot tree for Seeed studio boards.
