@@ -178,9 +178,9 @@ HSE 24Mhz Crystal
 
 By default CPU has 3 internal clocks HSI (high speed internal) 64Mhz, CSI (low power internal) 4Mhz and LSI (low speed internal) 32kHz and support additionally 2 external HSE (high speed external) clocks.
 
-To route clock to CPU, it need to go threw PLL1 (Phase-Locked Loops) circuit, which allow increasing frequency before it arrive at the processor. We could route HSI threw PLL1 to CPU but because of relatively lower accuracy HSE is much better suited for the job.
+To route clock to CPU, it need to go threw PLL1 (Phase-Locked Loops) circuit, which allow increasing frequency before it arrive at the processor. We could route HSI threw PLL1 to CPU but because of much higher accuracy HSE is better suited for the job.
 
-We can find on the schematics reference to 24Mhz crystal connected to GPIOH pin 0 and GPIOH pin 1. HSE provide only 24Mhz but because of much better accuracy than HSI, we can clock HSE up via PLL1 effectively up to ~1Ghz. Additionally we also clock RAM via HSE, to achieve maximum DDR3 frequency (533Mhz). 24Mhz clock is marked on the board's picture by number 20.
+We can find on the schematics reference to 24Mhz crystal connected to GPIOH pin 0 and GPIOH pin 1. HSE provide only 24Mhz but because of better accuracy (than HSI), we can clock HSE up via PLL1 effectively up to ~1Ghz. Additionally we also clock RAM via HSE, to achieve maximum DDR3 frequency (533Mhz). 24Mhz clock is marked on the board's picture by number 20.
 
 ```{csv-table} HSE 24Mhz pinnout
 :header: >
@@ -192,3 +192,21 @@ We can find on the schematics reference to 24Mhz crystal connected to GPIOH pin 
 ```
 
 ![Circuit diagram for HSE 24Mhz](assets/hse_24mhz_schematics_0.png)
+
+SWD
+----
+
+SWD allow us to connect debugger to the CPU which is quite usefull during the development.
+
+SWD pins are exposed using testing points on the back side of the board. If you are unfamiliar with how testing point looks like, they are these small
+copper pads, not covered with any kind of resin or paint. Testing points wich we are interested in are marked on the schematics as TP34, TP35, TP36, TP37.
+To find them on the board look on the picture below.
+
+![Circuit diagram with SWD pins](assets/swd_schematics_0.png)
+
+![SWD pins on photo](assets/odyssey-mp135d-emmc-version-back.jpg)
+
+To connect to the SWD pins with a debugger we need some kind of connector. I soldered 2.55mm pitch pins onto the pads, they are not fitting perfectly but it's possible to solder them parallel to the board. To make pins more prone to mechanical demages i covered them with epoxy resin, just be carefull to not go over the buttons, as it will propably make them unusable (as it happened to me).
+
+![Connector soldered with SWD pins](assets/swd_schematics_1.png)
+
