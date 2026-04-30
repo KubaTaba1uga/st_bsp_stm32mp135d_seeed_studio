@@ -16,7 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Doxygen
-        run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+        run:
+          sudo apt-get update && sudo apt-get install -y doxygen graphviz && \
+          virtualenv .venv && pip install invoke myst-parser==5.0.0 sphinx==8.2.3 breathe==4.36.0 sphinx_rtd_theme==3.0.2 sphinx-autobuild==2025.08.25
+      - name: Prepare directories
+        run: mkdir -p build/doxygen
       - name: Build docs
         run: doxygen docs/Doxyfile
       - name: Upload Pages artifact
