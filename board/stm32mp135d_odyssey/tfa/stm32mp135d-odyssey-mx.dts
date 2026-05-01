@@ -22,8 +22,8 @@
 /* USER CODE END includes */
 
 / {
-	model = "Ebook reader";
-	compatible = "st,stm32mp135d-mx", "st,stm32mp135";
+	model = "Linux BSP for Seeed Studio STM32MP135D";
+	compatible = "seeed,stm32mp135d-odyssey-mx";
 
 	memory@c0000000 {
 		device_type = "memory";

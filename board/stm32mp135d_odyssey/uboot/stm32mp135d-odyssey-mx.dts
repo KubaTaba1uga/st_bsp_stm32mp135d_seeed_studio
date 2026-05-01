@@ -19,8 +19,8 @@
 /* USER CODE END includes */
 
 / {
-	model = "STMicroelectronics custom STM32CubeMX board - openstlinux-6.6-yocto-scarthgap-mpu-v26.02.18";
-	compatible = "st,stm32mp135d-odyssey_dev_minimal_dt-mx", "st,stm32mp135";
+	model = "Linux BSP for Seeed Studio STM32MP135D";
+	compatible = "seeed,stm32mp135d-odyssey-mx";
 
 	memory@c0000000 {
 		device_type = "memory";
