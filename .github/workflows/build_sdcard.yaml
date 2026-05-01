@@ -53,6 +53,6 @@ jobs:
             --title "Latest CI artifacts" \
             --notes "Automatically generated from branch master" \
             --target "$GITHUB_SHA" \
-            --prerelease || true
+            --prerelease
 
           gh release upload latest release/* --clobber --repo "$GITHUB_REPOSITORY"
