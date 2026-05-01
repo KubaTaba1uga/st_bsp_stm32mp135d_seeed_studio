@@ -6,6 +6,9 @@ on:
     branches: [add_release_build]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +18,7 @@ jobs:
 
     env:
       FORCE_UNSAFE_CONFIGURE: "1"
+      GH_TOKEN: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +26,7 @@ jobs:
       - name: Install deps
         run: |
           apt update
-          apt install -y python3-invoke sudo
+          apt install -y python3-invoke sudo git gh
           inv install
 
       - name: Build
@@ -32,7 +36,21 @@ jobs:
       - name: Upload sdcard
         uses: actions/upload-artifact@v4
         with:
-          name: prod-image
+          name: seeed-studio-stm32mp135d-bsp-prod-image
           path: |
             build/buildroot/images/sdcard.img
             build/buildroot/.config
+
+      - name: Publish latest release artifacts
+        run: |
+          mkdir -p release
+          cp build/buildroot/images/sdcard.img release/sdcard.img
+          cp build/buildroot/.config release/buildroot.config
+
+          gh release create latest release/* \
+            --title "Latest CI artifacts" \
+            --notes "Automatically generated from branch master \
+            --target "$GITHUB_SHA" \
+            --prerelease || true
+
+          gh release upload latest release/* --clobber
