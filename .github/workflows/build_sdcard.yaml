@@ -9,7 +9,6 @@ on:
 permissions:
   contents: write
 
-  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,7 +27,7 @@ jobs:
           apt update
           apt install -y python3-invoke sudo git
           inv install
-          
+
       - name: Build
         run: |
           inv build-bsp
@@ -36,12 +35,11 @@ jobs:
           mkdir -p image
           mv build/buildroot/.config            image/config
           mv build/buildroot/images/sdcard.img  image/sdcard.img
-          
+
       - name: Upload sdcard
         uses: actions/upload-artifact@v4
         with:
-          name: seeed-studio-stm32mp135d-bsp-prod-image
+          name: bsp_seeed_studio_stm32mp135d_prod_image
           path: |
             image/config              
             image/sdcard.img
-
