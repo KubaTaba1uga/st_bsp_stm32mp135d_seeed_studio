@@ -65,18 +65,22 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
     }
     _pr_info(f"Building BSP...")
 
-    if "dev" in config:
-        c.run("mkdir -p third_party")
-        with c.cd("third_party"):
-            for repo, rdata in repos.items():
-                if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
-                    continue
-                c.run(f"git clone {rdata['url']} {repo}")
-                with c.cd(repo):
-                    c.run(f"git checkout {rdata['tag']}")
-                    patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}/{rdata['tag']}"
-                    if os.path.exists(patches_dir):
-                        c.run(f"find {patches_dir} -type f -exec git apply {{}} \\;")
+    if "debug" in config:
+        to_download = repos.items()
+    else:
+        to_download = [repo, data for repo, data in repos.items() if repo == "buildroot"]
+        
+    c.run("mkdir -p third_party")
+    with c.cd("third_party"):
+        for repo, rdata in repos.items():
+            if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
+                continue
+            c.run(f"git clone {rdata['url']} {repo}")
+            with c.cd(repo):
+                c.run(f"git checkout {rdata['tag']}")
+                patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}/{rdata['tag']}"
+                if os.path.exists(patches_dir):
+                    c.run(f"find {patches_dir} -type f -exec git apply {{}} \\;")
 
     if config:
         configure(c, config)
