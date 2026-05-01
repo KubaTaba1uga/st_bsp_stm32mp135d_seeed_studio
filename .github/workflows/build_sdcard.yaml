@@ -49,7 +49,7 @@ jobs:
 
           gh release create latest release/* \
             --title "Latest CI artifacts" \
-            --notes "Automatically generated from branch master \
+            --notes "Automatically generated from branch master" \
             --target "$GITHUB_SHA" \
             --prerelease || true
 
