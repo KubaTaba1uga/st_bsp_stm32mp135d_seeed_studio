@@ -55,4 +55,4 @@ jobs:
             --target "$GITHUB_SHA" \
             --prerelease || true
 
-          gh release upload latest release/* --clobber
+          gh release upload latest release/* --clobber --repo "$GITHUB_REPOSITORY"
