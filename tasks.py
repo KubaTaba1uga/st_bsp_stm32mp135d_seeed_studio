@@ -68,7 +68,7 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
     if "debug" in config:
         to_download = repos.items()
     else:
-        to_download = [repo, data for repo, data in repos.items() if repo == "buildroot"]
+        to_download = [(repo, data) for (repo, data) in repos.items() if repo == "buildroot"]
         
     c.run("mkdir -p third_party")
     with c.cd("third_party"):
