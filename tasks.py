@@ -69,10 +69,11 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
         to_download = repos.items()
     else:
         to_download = [(repo, data) for (repo, data) in repos.items() if repo == "buildroot"]
-        
+
+    
     c.run("mkdir -p third_party")
     with c.cd("third_party"):
-        for repo, rdata in repos.items():
+        for repo, rdata in to_download:
             if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
                 continue
             c.run(f"git clone {rdata['url']} {repo}")
