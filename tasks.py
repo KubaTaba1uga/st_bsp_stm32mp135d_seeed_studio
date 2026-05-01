@@ -49,16 +49,13 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
             (repo, data) for (repo, data) in repos.items() if repo == "buildroot"
         ]
 
-    print(f"{to_download=}")
     c.run("mkdir -p third_party")
     with c.cd("third_party"):
         for repo, rdata in to_download:
             if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
                 continue
 
-            print(f"{repo=}")
-            c.run(f"git clone {rdata['url']} {repo}")
-            print(f"{repo=}")            
+            c.run(f"git clone {rdata['url']} {repo}")           
             with c.cd(repo):
                 c.run(f"git checkout {rdata['version']}")
                 
@@ -291,8 +288,7 @@ def _find_repos_in_br_config(config: str):
 
 
 def _parse_config(config_path: str) -> dict:
-    result = {
-    }
+    result = {}
 
     with open(config_path, "r") as config_fp:
         config = config_fp.readlines()
