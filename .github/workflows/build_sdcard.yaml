@@ -1,13 +1,15 @@
+# .github/workflows/build.yml
 name: Build
 
 on:
   push:
-    branches: [add_release_build]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
   contents: write
 
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,27 +27,21 @@ jobs:
         run: |
           apt update
           apt install -y python3-invoke sudo git
-          # inv install
-
-      # - name: Build
-      #   run: inv build-bsp
-
-      - name: Prepare release files
+          inv install
+          
+      - name: Build
         run: |
-          mkdir -p release
-          touch release/sdcard.img
-          touch release/buildroot.config
-          # cp build/buildroot/images/sdcard.img release/sdcard.img
-          # cp build/buildroot/.config release/buildroot.config
+          inv build-bsp
 
-      - name: Publish latest release
-        uses: softprops/action-gh-release@v3
+          mkdir -p image
+          mv build/buildroot/.config            image/config
+          mv build/buildroot/images/sdcard.img  image/sdcard.img
+          
+      - name: Upload sdcard
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: latest
-          name: Latest CI artifacts
-          body: Automatically generated from branch add_release_build
-          prerelease: true
-          files: |
-            release/sdcard.img
-            release/buildroot.config
+          name: seeed-studio-stm32mp135d-bsp-prod-image
+          path: |
+            image/config              
+            image/sdcard.img
 
