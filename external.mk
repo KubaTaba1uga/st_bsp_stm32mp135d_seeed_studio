@@ -7,4 +7,4 @@ ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_RUN_POST_RSYNC_HOOK_SCRIPT)),)
 endif
 
 
-include $(sort $(wildcard $(BR2_EXTERNAL_ST_PATH)/package/*/*.mk))
+include $(sort $(wildcard $(BR2_EXTERNAL_SEEED_STUDIO_PATH)/package/*/*.mk))
