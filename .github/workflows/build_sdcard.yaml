@@ -44,6 +44,7 @@ jobs:
 
       - name: Publish latest release artifacts
         run: |
+          set -xeu
           mkdir -p release
           touch release/sdcard.img
           touch release/buildroot.config
