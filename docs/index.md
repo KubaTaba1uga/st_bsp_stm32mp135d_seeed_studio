@@ -24,6 +24,7 @@ so if you find something missing, feel free to contribute. Anyhow, here are the 
 ```{toctree}
 :maxdepth: 2
 
+getting_started
 hardware
 development
 ```

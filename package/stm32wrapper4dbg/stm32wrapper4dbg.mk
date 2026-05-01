@@ -4,17 +4,16 @@
 #
 ################################################################################
 
-STM32WRAPPER4DBG_VERSION = v5.1.2
-STM32WRAPPER4DBG_SITE = $(call github,STMicroelectronics,stm32wrapper4dbg,$(STM32WRAPPER4DBG_VERSION))
+HOST_STM32WRAPPER4DBG_VERSION = v5.1.2
+HOST_STM32WRAPPER4DBG_SITE = $(call github,STMicroelectronics,stm32wrapper4dbg,$(HOST_STM32WRAPPER4DBG_VERSION))
 
-define STM32WRAPPER4DBG_BUILD_CMDS
-	cd "$(@D)" ; \
-	PATH=$(BR_PATH) $(MAKE)
+define HOST_STM32WRAPPER4DBG_BUILD_CMDS
+	$(MAKE) -C $(@D)
 endef
 
-define STM32WRAPPER4DBG_INSTALL_TARGET_CMDS
-	cd "$(@D)" ; \
-	$(INSTALL) -m 0755 stm32wrapper4dbg $(HOST_DIR)/bin/
+define HOST_STM32WRAPPER4DBG_INSTALL_CMDS
+	$(INSTALL) -D -m 0755 $(@D)/stm32wrapper4dbg \
+		$(HOST_DIR)/bin/stm32wrapper4dbg
 endef
 
-$(eval $(generic-package))
+$(eval $(host-generic-package))

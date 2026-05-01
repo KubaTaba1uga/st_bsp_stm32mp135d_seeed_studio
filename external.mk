@@ -4,7 +4,8 @@ endef
 
 ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_RUN_POST_RSYNC_HOOK_SCRIPT)),)
      UBOOT_POST_RSYNC_HOOKS += UBOOT_RUN_POST_RSYNC_SCRIPT
+     UBOOT_POST_EXTRACT_HOOKS += UBOOT_RUN_POST_RSYNC_SCRIPT
 endif
 
 
-include $(sort $(wildcard $(BR2_EXTERNAL_ST_PATH)/package/*/*.mk))
+include $(sort $(wildcard $(BR2_EXTERNAL_SEEED_STUDIO_PATH)/package/*/*.mk))
