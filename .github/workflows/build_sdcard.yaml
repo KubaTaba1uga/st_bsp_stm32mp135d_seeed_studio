@@ -13,6 +13,9 @@ jobs:
     container:
       image: debian:trixie
 
+    env:
+      FORCE_UNSAFE_CONFIGURE: "1"
+
     steps:
       - uses: actions/checkout@v4
 
