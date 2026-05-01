@@ -1,4 +1,3 @@
-# .github/workflows/build.yml
 name: Build
 
 on:
@@ -9,7 +8,6 @@ on:
 permissions:
   contents: write
 
-  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +17,6 @@ jobs:
 
     env:
       FORCE_UNSAFE_CONFIGURE: "1"
-      GH_TOKEN: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@v4
@@ -27,34 +24,28 @@ jobs:
       - name: Install deps
         run: |
           apt update
-          apt install -y python3-invoke sudo git gh
-      # inv install
+          apt install -y python3-invoke sudo git
+          # inv install
+
       # - name: Build
-      #   run: |
-      #     inv build-bsp
+      #   run: inv build-bsp
 
-      # - name: Upload sdcard
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: seeed-studio-stm32mp135d-bsp-prod-image
-      #     path: |
-      #       build/buildroot/images/sdcard.img
-      #       build/buildroot/.config
-      # cp build/buildroot/images/sdcard.img release/sdcard.img
-      # cp build/buildroot/.config release/buildroot.config
-
-      - name: Publish latest release artifacts
+      - name: Prepare release files
         run: |
-          set -xeu
           mkdir -p release
           touch release/sdcard.img
           touch release/buildroot.config
+          # cp build/buildroot/images/sdcard.img release/sdcard.img
+          # cp build/buildroot/.config release/buildroot.config
 
-          gh release create latest release/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "Latest CI artifacts" \
-            --notes "Automatically generated from branch master" \
-            --target "$GITHUB_SHA" \
-            --prerelease
+      - name: Publish latest release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: latest
+          name: Latest CI artifacts
+          body: Automatically generated from branch add_release_build
+          prerelease: true
+          files: |
+            release/sdcard.img
+            release/buildroot.config
 
-          gh release upload latest release/* --clobber --repo "$GITHUB_REPOSITORY"
