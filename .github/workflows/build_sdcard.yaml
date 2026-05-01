@@ -27,27 +27,29 @@ jobs:
         run: |
           apt update
           apt install -y python3-invoke sudo git gh
-          inv install
+      # inv install
+      # - name: Build
+      #   run: |
+      #     inv build-bsp
 
-      - name: Build
-        run: |
-          inv build-bsp
-
-      - name: Upload sdcard
-        uses: actions/upload-artifact@v4
-        with:
-          name: seeed-studio-stm32mp135d-bsp-prod-image
-          path: |
-            build/buildroot/images/sdcard.img
-            build/buildroot/.config
+      # - name: Upload sdcard
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: seeed-studio-stm32mp135d-bsp-prod-image
+      #     path: |
+      #       build/buildroot/images/sdcard.img
+      #       build/buildroot/.config
+      # cp build/buildroot/images/sdcard.img release/sdcard.img
+      # cp build/buildroot/.config release/buildroot.config
 
       - name: Publish latest release artifacts
         run: |
           mkdir -p release
-          cp build/buildroot/images/sdcard.img release/sdcard.img
-          cp build/buildroot/.config release/buildroot.config
+          touch release/sdcard.img
+          touch release/buildroot.config
 
           gh release create latest release/* \
+            --repo "$GITHUB_REPOSITORY" \
             --title "Latest CI artifacts" \
             --notes "Automatically generated from branch master" \
             --target "$GITHUB_SHA" \
