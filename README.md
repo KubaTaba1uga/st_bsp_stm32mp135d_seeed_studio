@@ -14,12 +14,17 @@ More info about the BSP can be found in docs [here](https://kubataba1uga.github.
 
 ### Supported peripherals
 
-Currently supported peripherals are:
+Currently we support following peripherals:
+ - HSE Clock
+ - DDR RAM
+ - PMIC
+ - BSEC
  - UART
- - SD card
- - USB
+ - SDMMC
+ - ETZPC
+ - USB-A
+ - USB-C (OTG)
  - SWD
- - GPIO
  
 Currently not supported peripherals are:
  - eMMC
