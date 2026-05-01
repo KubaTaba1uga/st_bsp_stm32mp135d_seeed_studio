@@ -78,7 +78,7 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
             c.run(f"git clone {rdata['url']} {repo}")
             with c.cd(repo):
                 c.run(f"git checkout {rdata['tag']}")
-                patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}/{rdata['tag']}"
+                patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}"
                 if os.path.exists(patches_dir):
                     c.run(f"find {patches_dir} -type f -exec git apply {{}} \\;")
 
