@@ -21,7 +21,7 @@ def install(c):
               which sed make binutils build-essential diffutils \
               gcc g++ bash patch gzip bzip2 perl tar cpio \
               unzip rsync file bc findutils gawk curl \
-              git libncurses5-dev python3"
+              git libncurses5-dev python3 wget xxd"
         )
 
         c.run("virtualenv .venv")
@@ -37,50 +37,34 @@ def install(c):
 
 
 @task
-def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
-    """
-    @todo change config="ebook_reader_dev_defconfig" to config="ebook_reader_defconfig"
-          dev build should not be default.
-
-    @todo download repos only if dev config
-    @todo get urls and versions from config file
-    """
-    repos = {
-        "buildroot": {
-            "tag": "st/2024.02.9",
-            "url": "https://github.com/bootlin/buildroot.git",
-        },
-        "linux": {
-            "tag": "v6.6-stm32mp-r2",
-            "url": "https://github.com/STMicroelectronics/linux.git",
-        },
-        "u-boot": {
-            "tag": "v2023.10-stm32mp-r2",
-            "url": "https://github.com/STMicroelectronics/u-boot.git",
-        },
-        "optee-os": {
-            "tag": "4.0.0-stm32mp-r2",
-            "url": "https://github.com/STMicroelectronics/optee_os.git",
-        },
-        "tf-a": {
-            "tag": "v2.10-stm32mp-r2",
-            "url": "https://github.com/STMicroelectronics/arm-trusted-firmware.git",
-        },
-    }
+def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
     _pr_info(f"Building BSP...")
 
-    if "dev" in config:
-        c.run("mkdir -p third_party")
-        with c.cd("third_party"):
-            for repo, rdata in repos.items():
-                if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
-                    continue
-                c.run(f"git clone {rdata['url']} {repo}")
-                with c.cd(repo):
-                    c.run(f"git checkout {rdata['tag']}")
-                    patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}/{rdata['tag']}"
-                    if os.path.exists(patches_dir):
-                        c.run(f"find {patches_dir} -type f -exec git apply {{}} \\;")
+    repos =_find_repos_in_br_config(config)
+
+    if "debug" in config:
+        to_download = repos.items()
+    else:
+        to_download = [
+            (repo, data) for (repo, data) in repos.items() if repo == "buildroot"
+        ]
+
+    print(f"{to_download=}")
+    c.run("mkdir -p third_party")
+    with c.cd("third_party"):
+        for repo, rdata in to_download:
+            if os.path.exists(os.path.join(ROOT_PATH, "third_party", repo)):
+                continue
+
+            print(f"{repo=}")
+            c.run(f"git clone {rdata['url']} {repo}")
+            print(f"{repo=}")            
+            with c.cd(repo):
+                c.run(f"git checkout {rdata['version']}")
+                
+                patches_dir = f"{ROOT_PATH}/board/stm32mp135d_odyssey/patches/{repo}"
+                if os.path.exists(patches_dir):
+                    c.run(f"find {patches_dir} -type f -name '*.patch' -exec git apply {{}} \\;")
 
     if config:
         configure(c, config)
@@ -88,17 +72,22 @@ def build_bsp(c, config="stm32mp135d_odyssey_dev_defconfig"):
     with c.cd("build/buildroot"):
         c.run("make")
 
-    with c.cd("build/buildroot/build/linux-custom"):
-        c.run(
-            "python scripts/clang-tools/gen_compile_commands.py && cp compile_commands.json ../../../../third_party/linux"
-        )
+    if "debug" in config:
+        with c.cd("build/buildroot/build/linux-custom"):
+            c.run(
+                "python scripts/clang-tools/gen_compile_commands.py && cp compile_commands.json ../../../../third_party/linux"
+            )
 
-        
     _pr_info(f"Building BSP completed")
 
 
 @task
-def configure(c, config="stm32mp135d_odyssey_dev_defconfig"):
+def configure(c, config="stm32mp135d_odyssey_prod_defconfig"):
+    """
+    Available configurations:
+       - stm32mp135d_odyssey_prod_defconfig
+       - stm32mp135d_odyssey_debug_defconfig
+    """
     _pr_info(f"Configuring buildroot...")
 
     with c.cd("third_party/buildroot"):
@@ -175,6 +164,7 @@ def deploy_sdcard(c, dev="sda"):
 
     _pr_info(f"Deploy to sdcard completed")
 
+
 @task
 def gdb(c, phase="tf-a", runetime_attach=False):
     """
@@ -204,43 +194,43 @@ def gdb(c, phase="tf-a", runetime_attach=False):
     if runetime_attach:
         debug_mode = 1
 
-    tools_path = os.path.join(ROOT_PATH, "tools", "gdb")        
+    tools_path = os.path.join(ROOT_PATH, "tools", "gdb")
     with open(os.path.join(tools_path, "init.gdb"), "r") as src:
         src_txt = src.read()
-        
-    src_txt = src_txt.replace("set $debug_phase = 1", f"set $debug_phase = {debug_phase}", count=1)
-    src_txt = src_txt.replace("set $debug_mode = 0", f"set $debug_mode = {debug_mode}", count=1)            
+
+    src_txt = src_txt.replace(
+        "set $debug_phase = 1", f"set $debug_phase = {debug_phase}", count=1
+    )
+    src_txt = src_txt.replace(
+        "set $debug_mode = 0", f"set $debug_mode = {debug_mode}", count=1
+    )
 
     with tempfile.NamedTemporaryFile(
-            "w", prefix="init", suffix=".gdb", delete_on_close=False
+        "w", prefix="init", suffix=".gdb", delete_on_close=False
     ) as dst:
         dst.write(src_txt)
-        dst.close()  
-                
+        dst.close()
+
         with c.cd(tools_path):
             c.run(f"gdb-multiarch -x {str(dst.name)}", pty=True)
 
 
 @task
 def openocd(c, command: str | None = None):
-    all_commands = {
-        'reboot': ["init", "reset run", "shutdown"]
-    }
-    
+    all_commands = {"reboot": ["init", "reset run", "shutdown"]}
+
     cmd = "openocd -f board/stm32mp13x_dk.cfg"
     commands = []
-    
+
     if command:
         commands = all_commands.get(command)
 
     if commands:
         cmd += " " + " ".join(f"-c '{command}'" for command in commands)
-        
+
     c.run(cmd, pty=True)
-    
-    
-    
-    
+
+
 ###############################################
 #                Private API                  #
 ###############################################
@@ -259,3 +249,64 @@ def _pr_debug(message: str):
 def _pr_error(message: str):
     print(f"\033[91m[ERROR] {message}\033[0m")
 
+
+def _find_repos_in_br_config(config: str):
+    repo_version_map = {
+        "tf-a": {
+            "url": "BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL",
+            "version": "BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION",
+        },
+        "optee-os": {
+            "url": "BR2_TARGET_OPTEE_OS_CUSTOM_REPO_URL",
+            "version": "BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION",
+        },
+        "u-boot": {
+            "url": "BR2_TARGET_UBOOT_CUSTOM_REPO_URL",
+            "version": "BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION",
+        },
+        "linux": {
+            "url": "BR2_LINUX_KERNEL_CUSTOM_REPO_URL",
+            "version": "BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION",
+        },
+    }
+    config_path = os.path.join(ROOT_PATH, "configs", config)
+    config_dict = _parse_config(config_path)
+
+    results = {
+        "buildroot": {
+            "version": "st/2024.02.9",
+            "url": "https://github.com/bootlin/buildroot.git",
+        },
+    }
+    for repo_name, repo_dict in repo_version_map.items():
+        url = config_dict.get(repo_dict["url"])
+        version = config_dict.get(repo_dict["version"])
+
+        if not (url and version):
+            continue
+
+        results[repo_name] = {"url": url, "version": version}
+
+    return results
+
+
+def _parse_config(config_path: str) -> dict:
+    result = {
+    }
+
+    with open(config_path, "r") as config_fp:
+        config = config_fp.readlines()
+
+    for line in config:
+        if line.startswith("#") or not "=" in line:
+            continue
+        key, value = line.split("=", maxsplit=1)
+
+        for i, char in enumerate(value):
+            if char == "#":
+                value = value[:i]
+                break
+
+        result[key] = value.strip()
+
+    return result
