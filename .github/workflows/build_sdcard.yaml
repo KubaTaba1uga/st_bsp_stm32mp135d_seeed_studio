@@ -1,0 +1,35 @@
+# .github/workflows/build.yml
+name: Build
+
+on:
+  push:
+    branches: [add_release_build]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debian:trixie
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: |
+          apt update
+          apt install -y python3-invoke
+          inv install
+
+      - name: Build
+        run: |
+          inv build-bsp
+
+      - name: Upload sdcard
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-image
+          path: |
+            build/buildroot/images/sdcard.img
+            build/buildroot/.config
