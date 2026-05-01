@@ -89,10 +89,11 @@ def build_bsp(c, config="stm32mp135d_odyssey_prod_defconfig"):
     with c.cd("build/buildroot"):
         c.run("make")
 
-    with c.cd("build/buildroot/build/linux-custom"):
-        c.run(
-            "python scripts/clang-tools/gen_compile_commands.py && cp compile_commands.json ../../../../third_party/linux"
-        )
+    if "debug" in config:        
+        with c.cd("build/buildroot/build/linux-custom"):
+            c.run(
+                "python scripts/clang-tools/gen_compile_commands.py && cp compile_commands.json ../../../../third_party/linux"
+            )
 
         
     _pr_info(f"Building BSP completed")
