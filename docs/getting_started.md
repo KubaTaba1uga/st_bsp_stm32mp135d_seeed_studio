@@ -28,6 +28,7 @@ sudo dd if=build/buildroot/images/sdcard.img of=/dev/sda bs=1M status=progress
 Once flashing completes put the SD card into the board and await following messages coming over UART:
 ```txt
 NOTICE:  CPU: STM32MP135D Rev.Y
+NOTICE:  Model: Linux BSP for Seeed Studio STM32MP135D
 NOTICE:  BL2: v2.10-stm32mp1-r2.0(release):v2.10-stm32mp-r2()
 NOTICE:  BL2: Built : 14:25:22, May  1 2026
 NOTICE:  BL2: Booting BL32
