@@ -12,10 +12,6 @@ The image is build in `build/buildroot/images/sdcard.img`, to flash it onto sdca
 
 More info about the BSP can be found in docs [here](https://kubataba1uga.github.io/st_bsp_stm32mp135d_seeed_studio/index.html).
 
-### Downloadable sdcard image
-
-We build production image of our BSP in CI/CD, you can download always freshest image here: 
-
 ### Supported peripherals
 
 Currently we support following peripherals:
